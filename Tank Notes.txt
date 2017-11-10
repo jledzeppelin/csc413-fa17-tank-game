@@ -1,0 +1,16 @@
+Tank Game 
+
+Background Class
+arrayList<double> concretewalls -> x and y coordinates for concrete walls 
+arrayList<double> destroyableWalls -> x and y coordinate for destroyable walls
+Methods:
+-mainBackground(graphics2d) : draw background
+-destroyableWall(): draws the wall that can be destroyed
+-concreteWall()
+bool checkForWall -> for when the tank moves or when a bullet is shot
+player 1 map
+payer 2 map
+minimap
+
+
+Tank Class:
