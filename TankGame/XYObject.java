@@ -10,11 +10,13 @@ public class XYObject {
   
   protected int x;
   protected int y;
+  protected int ob;
+
   
-  XYObject(int x1, int y1){
+  XYObject(int x1, int y1, int ob1){
     x = x1;
     y = y1;
-    
+    ob = ob1;
   }
   
   public int getX(){
@@ -27,6 +29,12 @@ public class XYObject {
     return y;
   }
   public void setY(int y1) {
+    y = y1;
+  }
+  public int getOb(){
+    return y;
+  }
+  public void setOb(int y1) {
     y = y1;
   }
 }

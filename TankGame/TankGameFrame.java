@@ -20,6 +20,9 @@ public class TankGameFrame {
     f.setVisible(true);
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     f.setSize(640,640);
+    
+    Thread t = new Thread();
+    t.start();
   }
 }
  
