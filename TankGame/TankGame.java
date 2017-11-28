@@ -19,11 +19,16 @@ public class TankGame extends JPanel implements Runnable{
   
   protected int width = 1280;
   protected int length = 1280;
+  
+  Map map;
   public TankGame(){
+    map = new Map();
     
     
     
-    
+  }
+  public void paintComponent(Graphics graphics){
+    map.player1Map(graphics);
   }
   
   // The thread is for the bullets being shot.

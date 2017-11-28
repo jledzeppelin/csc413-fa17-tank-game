@@ -32,9 +32,11 @@ public class XYObject {
     y = y1;
   }
   public int getOb(){
-    return y;
+    return ob;
   }
-  public void setOb(int y1) {
-    y = y1;
+  public void setOb(int ob1) {
+    ob = ob1;
   }
+  
+  
 }
