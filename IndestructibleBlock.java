@@ -21,6 +21,7 @@ public class IndestructibleBlock extends GameObject {
   
   @Override
   public Rectangle getBounds() {
+    
     return new Rectangle(x, y, 32, 32);
   }
 }

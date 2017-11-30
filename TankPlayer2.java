@@ -45,7 +45,7 @@ public class TankPlayer2 extends GameObject {
   @Override
   public void render(Graphics graphics) {
     graphics.setColor(Color.green);
-    graphics.fillRect(x, y, 32, 32);
+    graphics.fillRect(x, y, 32/2, 32/2);
   }
   
   @Override

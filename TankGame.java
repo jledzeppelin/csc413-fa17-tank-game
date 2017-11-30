@@ -93,7 +93,8 @@ public class TankGame extends Canvas implements Runnable {
     graphics2D.translate(cameraPlayer2.getX(), cameraPlayer2.getY());
     
     //***************** End of drawing section
-    
+    graphics.setColor(Color.black);
+    graphics.fillRect(WIDTH/2, 0, 30, HEIGHT);
     graphics.dispose();
     buffStrat.show();
   }
@@ -101,6 +102,7 @@ public class TankGame extends Canvas implements Runnable {
   public void loadLevel(BufferedImage image) {
     int width = image.getWidth();
     int height = image.getHeight();
+    boolean p1 = true;
     
     for (int xAxis = 0; xAxis < width; xAxis++) {
       for (int yAxis = 0; yAxis < height; yAxis++) {
@@ -118,7 +120,10 @@ public class TankGame extends Canvas implements Runnable {
         }
         //maybe change to xAxis * 64 and only draw in one pixel for the tanks in the level
         if (blue == 255) {
+          if(p1){
           handler.addObject(new TankPlayer1(xAxis * 32, yAxis * 32, ObjectID.Player1, handler));
+          p1 = false;
+          }
         }
         if (green == 255) {
           handler.addObject(new TankPlayer2(xAxis * 32, yAxis * 32, ObjectID.Player2, handler));
