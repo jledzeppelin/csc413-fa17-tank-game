@@ -3,5 +3,6 @@ public enum ObjectID {
   Player2(),
   DestructibleBlock(),
   IndestructibleBlock(),
-  UpgradeDrop();
+  UpgradeDrop(),
+  Bullet();
 }

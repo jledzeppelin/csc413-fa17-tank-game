@@ -125,4 +125,10 @@ public class TankPlayer2 extends GameObject {
     
   }
 */
+  public double getAngle() {
+    return angle;
+  }
+  public void setAngle(double angle) {
+    this.angle = angle;
+  }
 }
