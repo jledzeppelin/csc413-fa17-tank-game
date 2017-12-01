@@ -15,13 +15,14 @@ public class TankPlayer1 extends GameObject {
   float incX;
   float incY;
   int tileSize;
+  int angle;
   
   public TankPlayer1(int x, int y, ObjectID id, GameHandler handler) {
     super(x, y, id);
     this.handler = handler;
     i = 0;
-    positiveX = false;
-    positiveY = true;
+    //positiveX = false;
+    //positiveY = true;
     
     incY = 0;
     incX = 15;
@@ -34,24 +35,29 @@ public class TankPlayer1 extends GameObject {
       this.tank[ index ] = tank1.getSubimage(
           index * tileSize, 0, tileSize, tileSize );
     }
-    
+    angle = 360 / tank.length;
   }
   
   @Override
   public void tick() {
-    x += velocityX/3;
-    y += velocityY/3;
+    //collision();
+    x += velocityX;
+    y -= velocityY;
     
-    float div = 5 /(tank.length / 4);
-   // boolean positiveX;
-   // boolean positiveY;
-    
-    
-    
+    if (collision()){
+      x += velocityX * -1;
+      y -= velocityY * -1;
+    }
+   
     //player 1 movement
     if (handler.isUpPlayer1()) {
+      
       velocityX = incX;
       velocityY = incY;
+      //if (collision()){
+     // velocityX += velocityX * -1.5;
+     // velocityY += velocityY * -1.5;
+    // }
     } else if (!handler.isDownPlayer1()) {
       velocityX = 0;
       velocityY = 0;
@@ -60,57 +66,41 @@ public class TankPlayer1 extends GameObject {
     if (handler.isDownPlayer1()) {
       velocityX = -incX;
       velocityY = -incY;
+    //  if (collision()){
+    //  velocityX += velocityX * -1.5;
+    //  velocityY += velocityY * -1.5;
+     //}
     } else if (!handler.isUpPlayer1()) {
       velocityX = 0;
       velocityY = 0;
     }
     
     if (handler.isLeftPlayer1()) {
-      //velocityX = -3;
-      //i = (i+5) % tank.length;
-      if(i < tank.length / 4){
-        incX -= 1;
-        incY -= 1;
-      } else if(i >= tank.length /4 && i < tank.length  / 2){
-        incX -= 1;
-        incY += 1;
-      } else if (i >= tank.length / 2 && i < tank.length * 3/ 4){
-        incX += 1;
-        incY += 1;
-      } else if(i >= tank.length * 3 / 4 && i < tank.length ){
-        incX += 1;
-        incY -= 1;
-      }
-      //i = (i+5) % tank.length;
+      
       i = (i +1) % tank.length;
+      
+      //incX = 3 * (float)Math.cos((i * angle));
+      //incY = 3 * (float)Math.sin((i * angle));
     } else if (!handler.isRightPlayer1()) {
       //velocityX = 0;
     }
     
     if (handler.isRightPlayer1()) {
-      if(i <= tank.length / 4){
-        incX += 1;
-        incY += 1;
-      } else if(i > tank.length /4 && i <= tank.length  / 2){
-        incX += 1;
-        incY -= 1;
-      } else if (i > tank.length / 2 && i <= tank.length * 3/ 4){
-        incX -= 1;
-        incY -= 1;
-      } else if(i > tank.length * 3 / 4 && i <= tank.length){
-        incX -= 1;
-        incY += 1;
-      }
+      
+      
       if(i == 0){
        i = tank.length -1;
       } else {
         i = (i - 1) % tank.length;
-       
       }
     } else if (!handler.isLeftPlayer1()) {
       //velocityX = 0;
     }
+    float tmpAngle = (float)Math.toRadians((i * angle));
+    incX = 3 * (float)Math.cos(tmpAngle);
+    incY = 3 * (float)Math.sin(tmpAngle);
   }
+  
   
   /*
   public void tick() {
@@ -143,6 +133,22 @@ public class TankPlayer1 extends GameObject {
     }
   }
   */
+  private boolean collision() {
+    for ( int i = 0; i < handler.obj.size(); i++ ) {
+      GameObject tmpObj = handler.obj.get(i);
+        if(tmpObj.getID() == ObjectID.IndestructibleBlock){
+          if(getBounds().intersects(tmpObj.getBounds())){
+            //velocityX += velocityX * -1;
+            //velocityY += velocityY * -1;
+           // incX += incX * -1.1;
+            //incY += incY * -1.1;
+            return true;
+          }
+        }
+    }
+    return false;
+  }
+  
   @Override
   public void render(Graphics graphics) {
     graphics.drawImage(tank[i], x, y, null);
@@ -153,6 +159,6 @@ public class TankPlayer1 extends GameObject {
   
   @Override
   public Rectangle getBounds() {
-    return null;//new Rectangle(x, y, 32, 32);
+    return new Rectangle(x, y, tank[i].getWidth(), tank[i].getHeight());
   }
 }

@@ -12,7 +12,9 @@ public class TankGame extends Canvas implements Runnable {
   private boolean isRunning = false;
   private Thread thread;
   private GameHandler handler;
+  
   private BufferedImage level = null;
+  private BufferedImage background = null;
   private Camera cameraPlayer1;
   private Camera cameraPlayer2;
   //need another camera for player2
@@ -30,6 +32,9 @@ public class TankGame extends Canvas implements Runnable {
     
     ImageLoader loader = new ImageLoader();
     level = loader.loadImage("/tankGameMap.png");
+    
+    
+    background = loader.loadImage("/background_tile.png");
     
     loadLevel(level);
   }
@@ -83,7 +88,12 @@ public class TankGame extends Canvas implements Runnable {
     
     graphics.setColor(Color.lightGray);
     graphics.fillRect(0, 0, WIDTH, HEIGHT);
+    //for(int x = 0; x <= WIDTH; x+=background.getWidth()){
+     //for(int y = 0; y<= HEIGHT; y+= background.getHeight()){
     
+       graphics.drawImage(background, 0, 0, null);
+      //}
+    //}
     graphics2D.translate(-cameraPlayer1.getX(), -cameraPlayer1.getY());  
     handler.render(graphics, cameraPlayer1);
     graphics2D.translate(cameraPlayer1.getX(), cameraPlayer1.getY());
@@ -131,6 +141,9 @@ public class TankGame extends Canvas implements Runnable {
         
       }
     }
+    
+    
+    
   }
   
   //game loop here
