@@ -1,9 +1,6 @@
 import java.awt.*;
 import java.awt.Canvas;
 import java.awt.image.*;
-//import java.util.Observable;
-//import java.util.Observer;
-//import javax.swing.*;
 
 public class TankGame extends Canvas implements Runnable {
   public static int WIDTH = 1000;
@@ -14,16 +11,15 @@ public class TankGame extends Canvas implements Runnable {
   private GameHandler handler;
   private BufferedImage level = null;
   private Camera cameraPlayer1;
-  //need another camera for player2
-  //private Camera cameraPlayer2
+  private Camera cameraPlayer2;
           
   public TankGame() {
     new GameWindow(WIDTH, HEIGHT, "Tank Game", this);
     start();
     
-    //use this handler only (only instance created)
     handler = new GameHandler();
-    cameraPlayer1 = new Camera(0, 0);
+    cameraPlayer1 = new Camera(0, 0, WIDTH, HEIGHT);
+    cameraPlayer2 = new Camera(0, 0, WIDTH, HEIGHT);
     this.addKeyListener(new KeyInput(handler));
     
     ImageLoader loader = new ImageLoader();
@@ -53,12 +49,12 @@ public class TankGame extends Canvas implements Runnable {
     
     for (int i = 0; i < handler.obj.size(); i++) {
       if (handler.obj.get(i).getID() == ObjectID.Player1) {
-        cameraPlayer1.tick(handler.obj.get(i));
+        cameraPlayer1.tickPlayer1(handler.obj.get(i));
       }
-      //TO DO add another camera for player 2
-      //if (handler.obj.get(i).getID() == ObjectID.Player2) {
-      //  cameraPlayer1.tick(handler.obj.get(i));
-      //}
+      
+      if (handler.obj.get(i).getID() == ObjectID.Player2) {
+        cameraPlayer2.tickPlayer2(handler.obj.get(i));
+      }
     }
     
     handler.tick();
@@ -73,7 +69,6 @@ public class TankGame extends Canvas implements Runnable {
       return;
     }
     
-    //TO DO camera for player 2
     Graphics graphics = buffStrat.getDrawGraphics();
     Graphics2D graphics2D = (Graphics2D) graphics;
     
@@ -82,9 +77,16 @@ public class TankGame extends Canvas implements Runnable {
     graphics.setColor(Color.lightGray);
     graphics.fillRect(0, 0, WIDTH, HEIGHT);
     
-    graphics2D.translate(-cameraPlayer1.getX(), -cameraPlayer1.getY());  
-    handler.render(graphics);
+    graphics2D.translate(-cameraPlayer1.getX(), -cameraPlayer1.getY());
+    handler.renderPlayer1(graphics, cameraPlayer1);
     graphics2D.translate(cameraPlayer1.getX(), cameraPlayer1.getY());
+    
+    graphics2D.translate(-cameraPlayer2.getX(), -cameraPlayer2.getY());
+    handler.renderPlayer2(graphics, cameraPlayer2);
+    graphics2D.translate(cameraPlayer2.getX(), cameraPlayer2.getY());
+    
+    graphics.setColor(Color.black);
+    graphics.fillRect(WIDTH / 2, 0, 30, HEIGHT);
     
     //***************** End of drawing section
     
@@ -110,12 +112,11 @@ public class TankGame extends Canvas implements Runnable {
         if (red == 170) {
           handler.addObject(new DestructibleBlock(xAxis * 32, yAxis * 32, ObjectID.DestructibleBlock));
         }
-        //maybe change to xAxis * 64 and only draw in one pixel for the tanks in the level
         if (blue == 255) {
-          handler.addObject(new TankPlayer1(xAxis * 32, yAxis * 32, ObjectID.Player1, handler));
+          handler.addObject(new TankPlayer1(xAxis * 32, yAxis * 32, 180, ObjectID.Player1, handler));
         }
         if (green == 255) {
-          handler.addObject(new TankPlayer2(xAxis * 32, yAxis * 32, ObjectID.Player2, handler));
+          handler.addObject(new TankPlayer2(xAxis * 32, yAxis * 32, 0, ObjectID.Player2, handler));
         }
         
       }

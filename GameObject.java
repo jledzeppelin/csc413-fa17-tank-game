@@ -2,12 +2,16 @@ import java.awt.Rectangle;
 import java.awt.Graphics;
 
 public abstract class GameObject {
-  protected int x, y;
-  protected float velocityX = 0;
+  public final int tankWidth = 64;
+  public final int tankHeight = 64;
+  public final int blockWidth = 32;
+  public final int blockHeight = 32;
+  protected double x, y;
+  protected float velocityX = 0; //may not need these
   protected float velocityY = 0;
   protected ObjectID id;
   
-  public GameObject(int x, int y, ObjectID id) {
+  public GameObject(double x, double y, ObjectID id) {
     this.x = x;
     this.y = y;
     this.id = id;
@@ -19,16 +23,16 @@ public abstract class GameObject {
   public abstract Rectangle getBounds();
   
   //setters and getters
-  public int getX() {
+  public double getX() {
     return x;
   }
-  public int getY() {
+  public double getY() {
     return y;
   }
-  public void setX(int x) {
+  public void setX(double x) {
     this.x = x;
   }
-  public void setY(int y) {
+  public void setY(double y) {
     this.y = y;
   }
   public float getVelocityX() {

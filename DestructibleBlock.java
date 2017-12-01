@@ -4,7 +4,7 @@ import java.awt.Rectangle;
 
 public class DestructibleBlock extends GameObject {
   
-  public DestructibleBlock(int x, int y, ObjectID id) {
+  public DestructibleBlock(double x, double y, ObjectID id) {
     super(x, y, id);
   }
   
@@ -16,11 +16,11 @@ public class DestructibleBlock extends GameObject {
   @Override
   public void render(Graphics graphics) {
     graphics.setColor(Color.cyan);
-    graphics.fillRect(x, y, 32, 32);
+    graphics.fillRect((int)x, (int)y, blockWidth, blockHeight);
   }
   
   @Override
   public Rectangle getBounds() {
-    return new Rectangle(x, y, 32, 32);
+    return new Rectangle((int)x, (int)y, blockWidth, blockHeight);
   }
 }

@@ -1,55 +1,128 @@
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
 
 public class TankPlayer1 extends GameObject {
+  //private int frontOfTankX;
+  //private int frontOfTankY;
+  //private int centerOfTankX;
+  //private int centerOfTankY;
+  private double angle;
+  private int tmpAngle = 0;
   
+  //private int tmpLoad; //shooting
+  //private ArrayList bullets;
+  //private String img = "/Tank_red_basic_strip60.png";
+  //private Image image;
+
   GameHandler handler;
   
-  public TankPlayer1(int x, int y, ObjectID id, GameHandler handler) {
+  public TankPlayer1(double x, double y, double angle, ObjectID id, GameHandler handler) {
     super(x, y, id);
+    this.angle = Math.toRadians(angle);
+    
+    //bullets = new ArrayList();
+    //tmpLoad = 0;
+    
+    //ImageIcon ii = new ImageIcon(img);
+    //image = ii.getImage();
+    
     this.handler = handler;
   }
   
   @Override
   public void tick() {
-    x += velocityX;
-    y += velocityY;
+    angle = Math.toRadians(tmpAngle);
     
-    //player 1 movement
-    if (handler.isUpPlayer1()) {
-      velocityY = -3;
-    } else if (!handler.isDownPlayer1()) {
-      velocityY = 0;
+    if (handler.isForwardPlayer1()) {
+      x += Math.cos(angle); //to increase speed i think we need to multiply by some constant
+      y += Math.sin(angle);
+    } else if (!handler.isBackwardPlayer1()) {
+      x += 0;
+      y += 0;
     }
     
-    if (handler.isDownPlayer1()) {
-      velocityY = 3;
-    } else if (!handler.isUpPlayer1()) {
-      velocityY = 0;
-    }
-    
-    if (handler.isLeftPlayer1()) {
-      velocityX = -3;
-    } else if (!handler.isRightPlayer1()) {
-      velocityX = 0;
+    if (handler.isBackwardPlayer1()) {
+      x -= Math.cos(angle);
+      y -= Math.sin(angle);
+    } else if (!handler.isForwardPlayer1()) {
+      x += 0;
+      y += 0;
     }
     
     if (handler.isRightPlayer1()) {
-      velocityX = 3;
+      tmpAngle += 5;
     } else if (!handler.isLeftPlayer1()) {
-      velocityX = 0;
+      tmpAngle += 0;
+    }
+    
+    if (handler.isLeftPlayer1()) {
+      tmpAngle -= 5;
+    } else if (!handler.isRightPlayer1()) {
+      tmpAngle -= 0;
+    }
+    
+    if (tmpAngle > 360) {
+      tmpAngle = 0;
+    } else if (tmpAngle < 0) {
+      tmpAngle = 360;
     }
   }
   
   @Override
   public void render(Graphics graphics) {
-    graphics.setColor(Color.blue);
-    graphics.fillRect(x, y, 32, 32);
+    Graphics2D graphics2D = (Graphics2D) graphics;
+    
+    graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    AffineTransform old = graphics2D.getTransform();
+    graphics2D.setColor(Color.blue);
+    
+    //rotating tank around center
+    graphics2D.rotate(angle, x + tankWidth / 2, y + tankHeight / 2);
+    graphics2D.drawRect((int)x, (int)y, tankWidth, tankHeight);
+    
+    //to show where the front of tank is
+    graphics2D.fillRect((int)x + tankWidth, (int)y + 10, 10, 30);
+    
+    graphics2D.setTransform(old);
   }
   
   @Override
   public Rectangle getBounds() {
-    return new Rectangle(x, y, 32, 32);
+    return new Rectangle((int)x, (int)y, tankWidth, tankHeight);
   }
+  
+  //public ArrayList getBullets() {
+  //  return bullets;
+  //}
+  
+  /*
+  private void collision() {
+    TankCollision tankCollision = new TankCollision();
+    
+    for (int i = 0; i < handler.obj.size(); i++) {
+      GameObject tmpObj = handler.obj.get(i);
+      
+      if (tmpObj.getID() == ObjectID.DestructibleBlock || tmpObj.getID() == ObjectID.IndestructibleBlock ||
+              tmpObj.getID() == ObjectID.Player2) {
+        if (tankCollision.collides((int)(x + velocityX), y, getBounds(), tmpObj.getBounds())) {
+          velocityX = 0;
+        }
+        
+        if (tankCollision.collides(x, (int)(y + velocityY), getBounds(), tmpObj.getBounds())) {
+          velocityY = 0;
+        }
+      }
+    }
+    
+  }
+*/
 }
