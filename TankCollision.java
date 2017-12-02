@@ -10,12 +10,12 @@ public class TankCollision {
     tmpArea1 = new Area(shape1);
     tmpArea2 = new Area(shape2);
     
-    AffineTransform shape1Trans = AffineTransform.getRotateInstance(angle1, shape1.getBounds2D().getX(),
-            shape1.getBounds2D().getY());
+    AffineTransform shape1Trans = AffineTransform.getRotateInstance(angle1, shape1.getBounds().x,
+            shape1.getBounds().y);
     tmpArea1.transform(shape1Trans);
     
-    AffineTransform shape2Trans = AffineTransform.getRotateInstance(angle2, shape2.getBounds2D().getX(),
-            shape2.getBounds2D().getY());
+    AffineTransform shape2Trans = AffineTransform.getRotateInstance(angle2, shape2.getBounds().x,
+            shape2.getBounds().y);
     tmpArea2.transform(shape2Trans);
     
     tmpArea1.intersect(tmpArea2);

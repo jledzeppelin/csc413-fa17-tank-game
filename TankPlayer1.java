@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
@@ -13,6 +12,8 @@ public class TankPlayer1 extends GameObject {
   
   private BufferedImage tank;
   private int tileSize;
+  private double xSpeed;
+  private double ySpeed;
   
   private int reloadTime;
 
@@ -29,9 +30,9 @@ public class TankPlayer1 extends GameObject {
     BufferedImage tankStrip = loader.loadImage("/Tank_blue_heavy_strip60.png");
     tileSize = tankStrip.getWidth() / 60;
     tank = tankStrip.getSubimage(0 * tileSize, 0, tileSize, tileSize);
-
-    reloadTime = 0;
     
+
+    reloadTime = 0; 
     this.handler = handler;
   }
   
@@ -39,22 +40,24 @@ public class TankPlayer1 extends GameObject {
   public void tick() {
     angle = Math.toRadians(tmpAngle);
     
+    x += xSpeed;
+    y += ySpeed;
     collision();
     
     if (handler.isForwardPlayer1()) {
-      x += Math.cos(angle); //could add a speed variable to change in TankGame
-      y += Math.sin(angle);
+      xSpeed = Math.cos(angle); //could add a speed variable to change in TankGame
+      ySpeed = Math.sin(angle);
     } else if (!handler.isBackwardPlayer1()) {
-      x += 0;
-      y += 0;
+      xSpeed = 0;
+      ySpeed = 0;
     }
     
     if (handler.isBackwardPlayer1()) {
-      x -= Math.cos(angle);
-      y -= Math.sin(angle);
+      xSpeed = -(Math.cos(angle));
+      ySpeed = -(Math.sin(angle));
     } else if (!handler.isForwardPlayer1()) {
-      x += 0;
-      y += 0;
+      xSpeed = 0;
+      ySpeed = 0;
     }
     
     if (handler.isRightPlayer1()) {
@@ -97,7 +100,7 @@ public class TankPlayer1 extends GameObject {
     graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     AffineTransform old = graphics2D.getTransform();
     
-    //rotating tank around center
+    //rotating tank pivoting around center
     graphics2D.rotate(angle, x + width / 2, y + height / 2);
     graphics2D.drawImage(tank, (int)x, (int)y, width, height, null);
     
@@ -115,6 +118,18 @@ public class TankPlayer1 extends GameObject {
   }
  
   private void collision() {
+    for (int i = 0; i < handler.obj.size(); i++) {
+      GameObject tmpObj = handler.obj.get(i);
+      
+        if (tmpObj.getID() == ObjectID.IndestructibleBlock || tmpObj.getID() == ObjectID.DestructibleBlock ||
+                tmpObj.getID() == ObjectID.Player2){
+          if (getBounds().intersects(tmpObj.getBounds())) {
+            x += xSpeed * -1;
+            y += ySpeed * -1;
+          }
+        }
+    }
+    /*
     boolean collides;
     TankCollision collisionCheck = new TankCollision();
     
@@ -126,10 +141,13 @@ public class TankPlayer1 extends GameObject {
         
         collides = collisionCheck.collides(this.getShape(), angle, tmpObj.getShape(), tmpObj.getAngle());
         
-        if (collides) {
+        if (collides) {       
           //TO DO
+          x += xSpeed * -1;
+          y += ySpeed * -1;
         }
       }
     }
+    */
   }
 }
