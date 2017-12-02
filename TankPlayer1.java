@@ -8,15 +8,12 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class TankPlayer1 extends GameObject {
-  private int tmpAngle;
-  
+  private int tmpAngle; 
   private BufferedImage tank;
   private int tileSize;
-  private double xSpeed;
-  private double ySpeed;
-  
+  private double xSpeed = 0;
+  private double ySpeed = 0;
   private int reloadTime;
-
   GameHandler handler;
   
   public TankPlayer1(double x, double y, int a, ObjectID id, GameHandler handler) {
@@ -30,7 +27,6 @@ public class TankPlayer1 extends GameObject {
     BufferedImage tankStrip = loader.loadImage("/Tank_blue_heavy_strip60.png");
     tileSize = tankStrip.getWidth() / 60;
     tank = tankStrip.getSubimage(0 * tileSize, 0, tileSize, tileSize);
-    
 
     reloadTime = 0; 
     this.handler = handler;
@@ -75,7 +71,7 @@ public class TankPlayer1 extends GameObject {
     if (handler.isShootPlayer1()) {
       if (reloadTime == 0) {
         //bullet takes (x, y, angle, speed, id, handler)
-        handler.addObject(new Bullet(x + width / 2, y + height / 2, angle, 8, ObjectID.Bullet, handler));
+        handler.addObject(new Bullet(x + width / 2, y + height / 2, angle, 8, ObjectID.Bullet, ObjectID.Player1, handler));
         reloadTime = 100;
       } else {
         reloadTime -= 1;

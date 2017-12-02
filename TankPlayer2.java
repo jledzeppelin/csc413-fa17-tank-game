@@ -4,18 +4,16 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class TankPlayer2 extends GameObject {
   private int tmpAngle;
-  
   private BufferedImage tank;
   private int tileSize;
-  
+  private double xSpeed;
+  private double ySpeed; 
   private int reloadTime;
-
   GameHandler handler;
   
   public TankPlayer2(double x, double y, int a, ObjectID id, GameHandler handler) {
@@ -31,7 +29,6 @@ public class TankPlayer2 extends GameObject {
     tank = tankStrip.getSubimage(0 * tileSize, 0, tileSize, tileSize);
 
     reloadTime = 0;
-    
     this.handler = handler;
   }
   
@@ -39,22 +36,24 @@ public class TankPlayer2 extends GameObject {
   public void tick() {
     angle = Math.toRadians(tmpAngle);
     
+    x += xSpeed;
+    y += ySpeed;
     collision();
     
     if (handler.isForwardPlayer2()) {
-      x += Math.cos(angle);
-      y += Math.sin(angle);
+      xSpeed = Math.cos(angle);
+      ySpeed = Math.sin(angle);
     } else if (!handler.isBackwardPlayer2()) {
-      x += 0;
-      y += 0;
+      xSpeed = 0;
+      ySpeed = 0;
     }
     
     if (handler.isBackwardPlayer2()) {
-      x -= Math.cos(angle);
-      y -= Math.sin(angle);
+      xSpeed = -(Math.cos(angle));
+      ySpeed = -(Math.sin(angle));
     } else if (!handler.isForwardPlayer2()) {
-      x += 0;
-      y += 0;
+      xSpeed = 0;
+      ySpeed = 0;
     }
     
     if (handler.isRightPlayer2()) {
@@ -71,7 +70,7 @@ public class TankPlayer2 extends GameObject {
     
     if (handler.isShootPlayer2()) {
       if (reloadTime == 0) {
-        handler.addObject(new Bullet(x + width / 2, y + height / 2, angle, 8, ObjectID.Bullet, handler));
+        handler.addObject(new Bullet(x + width / 2, y + height / 2, angle, 8, ObjectID.Bullet, ObjectID.Player2, handler));
         reloadTime = 100;
       } else {
         reloadTime -= 1;
@@ -114,22 +113,16 @@ public class TankPlayer2 extends GameObject {
   }
  
   private void collision() {
-    boolean collides;
-    TankCollision collisionCheck = new TankCollision();
-    
     for (int i = 0; i < handler.obj.size(); i++) {
       GameObject tmpObj = handler.obj.get(i);
       
-      if (tmpObj.getID() == ObjectID.DestructibleBlock || tmpObj.getID() == ObjectID.IndestructibleBlock ||
-              tmpObj.getID() == ObjectID.Player1) {
-        
-        collides = collisionCheck.collides(this.getShape(), angle, tmpObj.getShape(), tmpObj.getAngle());
-        
-        if (collides) {
-          x += 0;
-          y += 0;
+        if (tmpObj.getID() == ObjectID.IndestructibleBlock || tmpObj.getID() == ObjectID.DestructibleBlock ||
+                tmpObj.getID() == ObjectID.Player1){
+          if (getBounds().intersects(tmpObj.getBounds())) {
+            x += xSpeed * -1;
+            y += ySpeed * -1;
+          }
         }
-      }
     }
   }
 }

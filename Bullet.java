@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -6,24 +5,60 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 public class Bullet extends GameObject {
   private int bulletSpeed;
+  private BufferedImage bullet;
+  private int tileSize;
+  private double xSpeed;
+  private double ySpeed;
   GameHandler handler;
+  ObjectID enemyID;
   
-  public Bullet(double x, double y, double a, int speed, ObjectID id, GameHandler handler) {
+  public Bullet(double x, double y, double a, int speed, ObjectID id, ObjectID origin, GameHandler handler) {
     super(x, y, id);
     angle = a;
-    width = 5;
-    height = 5;
+    width = 17;
+    height = 17;
     bulletSpeed = speed;
     this.handler = handler;
+    
+    xSpeed = Math.cos(angle) * bulletSpeed;
+    ySpeed = Math.sin(angle) * bulletSpeed;
+    
+    ImageLoader loader = new ImageLoader();
+    BufferedImage bulletStrip = loader.loadImage("/Shell_heavy_strip60.png");
+    tileSize = bulletStrip.getWidth() / 60;
+    bullet = bulletStrip.getSubimage(30 * tileSize, 0, tileSize, tileSize);
+    
+    if (origin == ObjectID.Player1) {
+      enemyID = ObjectID.Player2;
+    } else {
+      enemyID = ObjectID.Player1;
+    }
   }
   
   @Override
   public void tick() {
-    x += Math.cos(angle) * bulletSpeed;
-    y += Math.sin(angle) * bulletSpeed;
+    x += xSpeed;
+    y += ySpeed;
+    
+    for (int i = 0; i < handler.obj.size(); i++) {
+      GameObject tmpObj = handler.obj.get(i);
+      
+      if (tmpObj.getID() == ObjectID.IndestructibleBlock || tmpObj.getID() == ObjectID.DestructibleBlock ||
+                tmpObj.getID() == enemyID) {
+        if (getBounds().intersects(tmpObj.getBounds())) {
+          handler.removeObject(this);
+          
+          if (tmpObj.getID() == ObjectID.DestructibleBlock) {
+            handler.removeObject(tmpObj);
+          }
+        }
+      }
+    }
+    
   }
   
   @Override
@@ -33,8 +68,9 @@ public class Bullet extends GameObject {
     graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     AffineTransform old = graphics2D.getTransform();
     
-    graphics2D.setColor(Color.blue);
-    graphics2D.fillRect((int)x, (int)y, width, height);
+    graphics2D.rotate(angle, x + width / 2, y + height / 2);
+    graphics2D.drawImage(bullet, (int)x, (int)y, width, height, null);
+    //bullet is a little off
     
     graphics2D.setTransform(old);
   }
