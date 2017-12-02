@@ -2,12 +2,8 @@ import java.awt.Rectangle;
 import java.awt.Graphics;
 
 public abstract class GameObject {
-  public final int tankWidth = 64;
-  public final int tankHeight = 64;
   public final int blockWidth = 32;
   public final int blockHeight = 32;
-  public final int bulletWidth = 5;
-  public final int bulletHeight = 5;
   
   protected double x, y;
   protected float velocityX = 0; //may not need these

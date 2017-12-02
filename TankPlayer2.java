@@ -3,37 +3,41 @@ import java.awt.Rectangle;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Image;
-import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
-
-import javax.swing.ImageIcon;
+import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 public class TankPlayer2 extends GameObject {
-  //private int frontOfTankX;
-  //private int frontOfTankY;
-  //private int centerOfTankX;
-  //private int centerOfTankY;
+  public final int tankWidth = 64;
+  public final int tankHeight = 64;
   private double angle;
-  private int tmpAngle = 0;
+  private int tmpAngle;
+  private Shape tankShape = null;
+  private Area tankArea = null;
   
-  //private int tmpLoad; //shooting
-  //private ArrayList bullets;
-  //private String img = "/Tank_red_basic_strip60.png";
-  //private Image image;
+  private BufferedImage tank;
+  private int tileSize;
+  
+  private int reloadTime;
 
   GameHandler handler;
   
-  public TankPlayer2(double x, double y, double angle, ObjectID id, GameHandler handler) {
+  public TankPlayer2(double x, double y, int angle, ObjectID id, GameHandler handler) {
     super(x, y, id);
     this.angle = Math.toRadians(angle);
+    tmpAngle = angle;
     
-    //bullets = new ArrayList();
-    //tmpLoad = 0;
+    ImageLoader loader = new ImageLoader();
+    BufferedImage tankStrip = loader.loadImage("/Tank_red_heavy_strip60.png");
+    tileSize = tankStrip.getWidth() / 60;
+    tank = tankStrip.getSubimage(0 * tileSize, 0, tileSize, tileSize);
+
+    reloadTime = 0;
     
-    //ImageIcon ii = new ImageIcon(img);
-    //image = ii.getImage();
+    tankShape = new Rectangle2D.Double(x, y, tankWidth, tankHeight);
+    tankArea = new Area(tankShape);
     
     this.handler = handler;
   }
@@ -43,7 +47,7 @@ public class TankPlayer2 extends GameObject {
     angle = Math.toRadians(tmpAngle);
     
     if (handler.isForwardPlayer2()) {
-      x += Math.cos(angle); 
+      x += Math.cos(angle);
       y += Math.sin(angle);
     } else if (!handler.isBackwardPlayer2()) {
       x += 0;
@@ -59,15 +63,28 @@ public class TankPlayer2 extends GameObject {
     }
     
     if (handler.isRightPlayer2()) {
-      tmpAngle += 5;
+      tmpAngle += 2;
     } else if (!handler.isLeftPlayer2()) {
       tmpAngle += 0;
     }
     
     if (handler.isLeftPlayer2()) {
-      tmpAngle -= 5;
+      tmpAngle -= 2;
     } else if (!handler.isRightPlayer2()) {
       tmpAngle -= 0;
+    }
+    
+    if (handler.isShootPlayer2()) {
+      if (reloadTime == 0) {
+        handler.addObject(new Bullet(x + tankWidth / 2, y + tankHeight / 2, angle, 8, ObjectID.Bullet, handler));
+        reloadTime = 100;
+      } else {
+        reloadTime -= 1;
+      }
+    } else if (!handler.isShootPlayer2()) {
+      if (reloadTime > 0) {
+        reloadTime -= 1;
+      }
     }
     
     if (tmpAngle > 360) {
@@ -83,14 +100,9 @@ public class TankPlayer2 extends GameObject {
     
     graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     AffineTransform old = graphics2D.getTransform();
-    graphics2D.setColor(Color.green);
     
-    //rotating tank around center
     graphics2D.rotate(angle, x + tankWidth / 2, y + tankHeight / 2);
-    graphics2D.drawRect((int)x, (int)y, tankWidth, tankHeight);
-    
-    //to show where the front of tank is
-    graphics2D.fillRect((int)x + tankWidth, (int)y + 10, 10, 30);
+    graphics2D.drawImage(tank, (int)x, (int)y, tankWidth, tankHeight, null);
     
     graphics2D.setTransform(old);
   }
@@ -100,35 +112,34 @@ public class TankPlayer2 extends GameObject {
     return new Rectangle((int)x, (int)y, tankWidth, tankHeight);
   }
   
-  //public ArrayList getBullets() {
-  //  return bullets;
-  //}
   
-  /*
   private void collision() {
-    TankCollision tankCollision = new TankCollision();
+    double tmpAngle;
+    TankPlayer2 tmpTank;
     
     for (int i = 0; i < handler.obj.size(); i++) {
       GameObject tmpObj = handler.obj.get(i);
       
-      if (tmpObj.getID() == ObjectID.DestructibleBlock || tmpObj.getID() == ObjectID.IndestructibleBlock ||
+      if (tmpObj.getID() == ObjectID.DestructibleBlock || tmpObj.getID() == ObjectID.DestructibleBlock ||
               tmpObj.getID() == ObjectID.Player2) {
-        if (tankCollision.collides((int)(x + velocityX), y, getBounds(), tmpObj.getBounds())) {
-          velocityX = 0;
+        if (tmpObj.getID() != ObjectID.Player2) {
+          tmpAngle = 0;
+        } else {
+          tmpTank = (TankPlayer2) tmpObj;
+          tmpAngle = tmpTank.getAngle();
         }
         
-        if (tankCollision.collides(x, (int)(y + velocityY), getBounds(), tmpObj.getBounds())) {
-          velocityY = 0;
-        }
       }
     }
-    
   }
-*/
+  
   public double getAngle() {
     return angle;
   }
   public void setAngle(double angle) {
     this.angle = angle;
+  }
+  public Area getArea() {
+    return tankArea;
   }
 }

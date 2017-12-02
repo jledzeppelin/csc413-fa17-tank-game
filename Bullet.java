@@ -7,13 +7,15 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 
 public class Bullet extends GameObject {
+  public final int bulletWidth = 5;
+  public final int bulletHeight = 5;
   private double angle;
   private int bulletSpeed;
   GameHandler handler;
   
   public Bullet(double x, double y, double angle, int speed, ObjectID id, GameHandler handler) {
     super(x, y, id);
-    this.angle = Math.toRadians(angle);
+    this.angle = angle;
     bulletSpeed = speed;
     this.handler = handler;
   }
