@@ -51,6 +51,10 @@ public class BulletObj extends GameObject{
   public void render(Graphics graphics) {
     
   }
+  @Override
+  public void renderMini(Graphics graphics, int x1, int y1) {
+    
+  }
   
   @Override
   public Rectangle getBounds() {

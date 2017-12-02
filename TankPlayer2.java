@@ -49,6 +49,13 @@ public class TankPlayer2 extends GameObject {
   }
   
   @Override
+  public void renderMini(Graphics graphics, int x1, int y1) {
+    //Graphics2d g2 = 
+   // graphics.drawImage(tank[i], x, y, 64 / 3, 64 / 3, null);
+    //graphics.setColor(Color.blue);
+    //graphics.fillRect(x, y, 32, 32);
+  }
+  @Override
   public Rectangle getBounds() {
     return new Rectangle(x, y, 32, 32);
   }

@@ -88,23 +88,43 @@ public class TankGame extends Canvas implements Runnable {
     
     graphics.setColor(Color.lightGray);
     graphics.fillRect(0, 0, WIDTH, HEIGHT);
-    //for(int x = 0; x <= WIDTH; x+=background.getWidth()){
-     //for(int y = 0; y<= HEIGHT; y+= background.getHeight()){
     
-       graphics.drawImage(background, 0, 0, null);
-      //}
-    //}
+    
     graphics2D.translate(-cameraPlayer1.getX(), -cameraPlayer1.getY());  
+    for(int x = 0; x <= WIDTH + 600; x+= 300){
+      for(int y = 0; y<= HEIGHT + 1000; y+= 200){
+        
+        graphics.drawImage(background, x, y, null);
+       //graphics.drawImage(background, background.getWidth(), 0, null);
+      }
+    }
     handler.render(graphics, cameraPlayer1);
     graphics2D.translate(cameraPlayer1.getX(), cameraPlayer1.getY());
     
     graphics2D.translate(-cameraPlayer2.getX(), -cameraPlayer2.getY());  
+    for(int x = 0; x <= WIDTH + 600; x+= 300){
+     for(int y = 0; y<= HEIGHT + 1000; y+= 200){
+       if( x >= cameraPlayer2.getX() + WIDTH/2)
+       graphics.drawImage(background, x, y, null);
+       //graphics.drawImage(background, background.getWidth(), 0, null);
+      }
+    }
     handler.render2(graphics, cameraPlayer2);
     graphics2D.translate(cameraPlayer2.getX(), cameraPlayer2.getY());
-    
     //***************** End of drawing section
     graphics.setColor(Color.black);
     graphics.fillRect(WIDTH/2, 0, 30, HEIGHT);
+    
+    
+    for(int x = 0; x <= WIDTH + 1000; x+= 300){
+     for(int y = 0; y<= HEIGHT + 1000; y+= 200){
+       if( x >= cameraPlayer2.getX() + WIDTH/2)
+      // graphics.drawImage(background, x, y, null);
+       graphics.drawImage(background, x/8 + 330, y/8 + 330, 300 / 7, 240 / 7, null);
+      }
+    }
+    handler.renderMinimap(graphics, 400, 330);
+    
     graphics.dispose();
     buffStrat.show();
   }
@@ -141,6 +161,8 @@ public class TankGame extends Canvas implements Runnable {
         
       }
     }
+    
+    
     
     
     

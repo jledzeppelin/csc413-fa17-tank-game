@@ -4,5 +4,6 @@ public enum ObjectID {
   DestructibleBlock(),
   IndestructibleBlock(),
   Bullet(),
+  Background(),
   UpgradeDrop();
 }

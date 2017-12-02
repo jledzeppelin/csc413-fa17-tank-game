@@ -24,6 +24,13 @@ public class DestructibleBlock extends GameObject {
     graphics.drawImage(block, x, y, null);
 
   }
+  @Override
+  public void renderMini(Graphics graphics, int x1, int y1) {
+    //Graphics2d g2 = 
+    graphics.drawImage(block, x/8 + x1, y/8 + y1, 32 / 8, 32 / 8, null);
+    //graphics.setColor(Color.blue);
+    //graphics.fillRect(x, y, 32, 32);
+  }
   
   @Override
   public Rectangle getBounds() {

@@ -45,8 +45,8 @@ public class TankPlayer1 extends GameObject {
     y -= velocityY;
     
     if (collision()){
-      x += velocityX * -1;
-      y -= velocityY * -1;
+      x += velocityX * -1.2;
+      y -= velocityY * -1.2;
     }
    
     //player 1 movement
@@ -102,37 +102,7 @@ public class TankPlayer1 extends GameObject {
   }
   
   
-  /*
-  public void tick() {
-    x += velocityX;
-    y += velocityY;
-    
-    //player 1 movement
-    if (handler.isUpPlayer1()) {
-      velocityY = -3;
-    } else if (!handler.isDownPlayer1()) {
-      velocityY = 0;
-    }
-    
-    if (handler.isDownPlayer1()) {
-      velocityY = 3;
-    } else if (!handler.isUpPlayer1()) {
-      velocityY = 0;
-    }
-    
-    if (handler.isLeftPlayer1()) {
-      velocityX = -3;
-    } else if (!handler.isRightPlayer1()) {
-      velocityX = 0;
-    }
-    
-    if (handler.isRightPlayer1()) {
-      velocityX = 3;
-    } else if (!handler.isLeftPlayer1()) {
-      velocityX = 0;
-    }
-  }
-  */
+  
   private boolean collision() {
     for ( int i = 0; i < handler.obj.size(); i++ ) {
       GameObject tmpObj = handler.obj.get(i);
@@ -158,7 +128,16 @@ public class TankPlayer1 extends GameObject {
   }
   
   @Override
+  public void renderMini(Graphics graphics, int x1, int y1) {
+    //Graphics2d g2 = 
+    graphics.drawImage(tank[i], x/8 + x1, y/8 + y1, 64 / 5, 64 / 5, null);
+    //graphics.setColor(Color.blue);
+    //graphics.fillRect(x, y, 32, 32);
+  }
+  
+  @Override
   public Rectangle getBounds() {
-    return new Rectangle(x, y, tank[i].getWidth(), tank[i].getHeight());
+    return new Rectangle(x, y, 64, 64);
+   // return new Rectangle(x, y, 32, 32);
   }
 }

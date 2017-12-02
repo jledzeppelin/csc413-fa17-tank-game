@@ -40,6 +40,15 @@ public class GameHandler {
     }
   }
   
+  public void renderMinimap(Graphics graphics,int x,int y) {
+    for (int i = 0; i < obj.size(); i++) {
+      
+      GameObject tmpObj = obj.get(i);
+      
+      tmpObj.renderMini(graphics, x, y);
+    }
+  }
+  
   //add object to the list
   public void addObject(GameObject tmpObj) {
     obj.add(tmpObj);

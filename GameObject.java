@@ -16,6 +16,7 @@ public abstract class GameObject {
   //objects update
   public abstract void tick();
   public abstract void render(Graphics graphics);
+  public abstract void renderMini(Graphics graphics, int x, int y);
   public abstract Rectangle getBounds();
   
   //setters and getters
