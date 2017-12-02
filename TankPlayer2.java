@@ -22,6 +22,8 @@ public class TankPlayer2 extends GameObject {
     width = 64;
     height = 64;
     tmpAngle = a;
+    health = 100;
+    lives = 2;
     
     ImageLoader loader = new ImageLoader();
     BufferedImage tankStrip = loader.loadImage("/Tank_red_heavy_strip60.png");
@@ -95,11 +97,15 @@ public class TankPlayer2 extends GameObject {
     graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     AffineTransform old = graphics2D.getTransform();
     
-    //rotating tank around center
     graphics2D.rotate(angle, x + width / 2, y + height / 2);
     graphics2D.drawImage(tank, (int)x, (int)y, width, height, null);
     
     graphics2D.setTransform(old);
+  }
+  
+  @Override
+  public void renderMini(Graphics graphics, int x, int y) {
+    graphics.drawImage(tank, (int)this.x / 8 + x, (int)this.y / 8 + y, width / 5, height / 5, null);
   }
   
   @Override

@@ -5,6 +5,7 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 public class TankPlayer1 extends GameObject {
@@ -22,6 +23,8 @@ public class TankPlayer1 extends GameObject {
     width = 64;
     height = 64;
     tmpAngle = a;
+    health = 100;
+    lives = 2;
     
     ImageLoader loader = new ImageLoader();
     BufferedImage tankStrip = loader.loadImage("/Tank_blue_heavy_strip60.png");
@@ -101,6 +104,11 @@ public class TankPlayer1 extends GameObject {
     graphics2D.drawImage(tank, (int)x, (int)y, width, height, null);
     
     graphics2D.setTransform(old);
+  }
+  
+  @Override
+  public void renderMini(Graphics graphics, int x, int y) {
+    graphics.drawImage(tank, (int)this.x / 8 + x, (int)this.y / 8 + y, width / 5, height / 5, null);
   }
   
   @Override

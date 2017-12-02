@@ -25,7 +25,6 @@ public class GameHandler {
   }
   
   public void renderPlayer1(Graphics graphics, Camera camera) {
-    //render objects for player1
     for (int i = 0; i < obj.size(); i++) {
       GameObject tmpObj = obj.get(i);
       
@@ -42,6 +41,13 @@ public class GameHandler {
       if (tmpObj.getX() > camera.getX() + 501) {
         tmpObj.render(graphics);
       }
+    }
+  }
+  
+  public void renderMinimap(Graphics graphics, int x, int y) {
+    for (int i = 0; i < obj.size(); i++) {
+      GameObject tmpObj = obj.get(i);  
+      tmpObj.renderMini(graphics, x, y);
     }
   }
   

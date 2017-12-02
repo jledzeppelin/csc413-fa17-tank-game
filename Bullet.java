@@ -47,6 +47,7 @@ public class Bullet extends GameObject {
     for (int i = 0; i < handler.obj.size(); i++) {
       GameObject tmpObj = handler.obj.get(i);
       
+      // TO DO change collision with enemy to be done by player classes
       if (tmpObj.getID() == ObjectID.IndestructibleBlock || tmpObj.getID() == ObjectID.DestructibleBlock ||
                 tmpObj.getID() == enemyID) {
         if (getBounds().intersects(tmpObj.getBounds())) {
@@ -73,6 +74,11 @@ public class Bullet extends GameObject {
     //bullet is a little off
     
     graphics2D.setTransform(old);
+  }
+  
+  @Override
+  public void renderMini(Graphics graphics, int x, int y) {
+    
   }
   
   @Override

@@ -9,6 +9,8 @@ public abstract class GameObject {
   protected double x, y, angle;
   protected int width;
   protected int height;
+  protected int health;
+  protected int lives;
   protected ObjectID id;
   
   public GameObject(double x, double y, ObjectID id) {
@@ -20,6 +22,7 @@ public abstract class GameObject {
   //objects update
   public abstract void tick();
   public abstract void render(Graphics graphics);
+  public abstract void renderMini(Graphics graphics, int x, int y);
   public abstract Rectangle getBounds();
   public abstract Shape getShape();
   
@@ -39,6 +42,12 @@ public abstract class GameObject {
   public int getHeigh() {
     return height;
   }
+  public int getHealth() {
+    return health;
+  }
+  public int getLives() {
+    return lives;
+  }
   public void setX(double x) {
     this.x = x;
   }
@@ -53,6 +62,12 @@ public abstract class GameObject {
   }
   public void setHeight(int h) {
     this.height = h;
+  }
+  public void setHealth(int h) {
+    this.health = h;
+  }
+  public void setLives(int l) {
+    this.lives = l;
   }
   public ObjectID getID() {
     return id;
