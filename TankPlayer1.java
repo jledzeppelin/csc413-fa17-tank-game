@@ -17,15 +17,12 @@ public class TankPlayer1 extends GameObject {
   int tileSize;
   int angle;
   
+  
   public TankPlayer1(int x, int y, ObjectID id, GameHandler handler) {
     super(x, y, id);
     this.handler = handler;
-    i = 0;
-    //positiveX = false;
-    //positiveY = true;
+    i = 0;  
     
-    incY = 0;
-    incX = 15;
     ImageLoader loader = new ImageLoader();  
     BufferedImage tank1 = loader.loadImage("/Tank_red_basic_strip60.png");
     tileSize = tank1.getWidth() / 60;
@@ -38,15 +35,18 @@ public class TankPlayer1 extends GameObject {
     angle = 360 / tank.length;
   }
   
+ 
   @Override
   public void tick() {
     //collision();
-    x += velocityX;
-    y -= velocityY;
+    x +=  velocityX;
+    y -=  velocityY;
     
     if (collision()){
+    // while(collision()){ 
       x += velocityX * -1.2;
       y -= velocityY * -1.2;
+     //}
     }
    
     //player 1 movement

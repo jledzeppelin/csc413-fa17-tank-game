@@ -13,10 +13,15 @@ public class TankGame extends Canvas implements Runnable {
   private Thread thread;
   private GameHandler handler;
   
+  
   private BufferedImage level = null;
   private BufferedImage background = null;
   private Camera cameraPlayer1;
   private Camera cameraPlayer2;
+  public static int player1Health;
+  public static int player1Lives;
+  public static int player2Health;
+  public static int player2Lives;
   //need another camera for player2
   //private Camera cameraPlayer2
           
@@ -61,10 +66,15 @@ public class TankGame extends Canvas implements Runnable {
     for (int i = 0; i < handler.obj.size(); i++) {
       if (handler.obj.get(i).getID() == ObjectID.Player1) {
         cameraPlayer1.tick(handler.obj.get(i));
+        player1Health = handler.obj.get(i).getHealth();
+        player1Lives = handler.obj.get(i).getLives();
+        
       }
       //TO DO add another camera for player 2
       if (handler.obj.get(i).getID() == ObjectID.Player2) {
         cameraPlayer2.tick2(handler.obj.get(i));
+        player2Health = handler.obj.get(i).getHealth();
+        player2Lives = handler.obj.get(i).getLives();
       }
     }
     
@@ -116,14 +126,30 @@ public class TankGame extends Canvas implements Runnable {
     graphics.fillRect(WIDTH/2, 0, 30, HEIGHT);
     
     
-    for(int x = 0; x <= WIDTH + 1000; x+= 300){
+    for(int x = 0; x <= WIDTH + 600; x+= 300){
      for(int y = 0; y<= HEIGHT + 1000; y+= 200){
-       if( x >= cameraPlayer2.getX() + WIDTH/2)
+      // if( x >= cameraPlayer2.getX() + WIDTH/2)
       // graphics.drawImage(background, x, y, null);
-       graphics.drawImage(background, x/8 + 330, y/8 + 330, 300 / 7, 240 / 7, null);
+       graphics.drawImage(background, x/8 + 380, y/8 + 330, 300 / 7, 240 / 7, null);
       }
     }
     handler.renderMinimap(graphics, 400, 330);
+    
+    graphics.setColor(Color.green);
+    graphics.fillRect(0, 500, player1Health, 20);
+    
+    for(int x = 0; x < player1Lives; x++){
+      graphics.setColor(Color.gray);
+      graphics.fillOval(150 + 20 * x, 500, 20, 20);
+    }
+    
+    graphics.setColor(Color.green);
+    graphics.fillRect(600, 500, player2Health, 20);
+    
+    for(int x = 0; x < player2Lives; x++){
+      graphics.setColor(Color.gray);
+      graphics.fillOval(750 + 20 * x, 500, 20, 20);
+    }
     
     graphics.dispose();
     buffStrat.show();
@@ -133,6 +159,7 @@ public class TankGame extends Canvas implements Runnable {
     int width = image.getWidth();
     int height = image.getHeight();
     boolean p1 = true;
+    boolean p2 = true;
     
     for (int xAxis = 0; xAxis < width; xAxis++) {
       for (int yAxis = 0; yAxis < height; yAxis++) {
@@ -156,7 +183,10 @@ public class TankGame extends Canvas implements Runnable {
           }
         }
         if (green == 255) {
-          handler.addObject(new TankPlayer2(xAxis * 32, yAxis * 32, ObjectID.Player2, handler));
+          if(p2){
+            handler.addObject(new TankPlayer2(xAxis * 32, yAxis * 32, ObjectID.Player2, handler));
+            p2 = false;
+          }
         }
         
       }

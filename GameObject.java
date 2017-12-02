@@ -6,6 +6,8 @@ public abstract class GameObject {
   protected float velocityX = 0;
   protected float velocityY = 0;
   protected ObjectID id;
+  protected int health = 100;
+  protected int lives = 2;
   
   public GameObject(int x, int y, ObjectID id) {
     this.x = x;
@@ -47,7 +49,14 @@ public abstract class GameObject {
   public ObjectID getID() {
     return id;
   }
+ 
   public void setID(ObjectID id) {
     this.id = id;
+  }
+  public int getHealth() {
+    return health;
+  }
+  public int getLives() {
+    return lives;
   }
 }

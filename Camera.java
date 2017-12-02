@@ -21,10 +21,10 @@ public class Camera {
   }
   public void tick2(GameObject obj) {
     //makes camera smooth
-    x += ((obj.getX() - x) - 3*WIDTH / 4) * 0.05f;
+    x += ((obj.getX() - x) -  3 * WIDTH / 4) * 0.05f;
     y += ((obj.getY() - y) - HEIGHT / 2) * 0.05f;
     
-    if (x <= -500) x = -500;
+    if (x <= -520) x = -520;
     if (x >= 605) x = 605;
     if (y <= 0) y = 0;
     if (y >= 1065) y = 1065;
