@@ -1,21 +1,21 @@
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 
 public class Bullet extends GameObject {
-  public final int bulletWidth = 5;
-  public final int bulletHeight = 5;
-  private double angle;
   private int bulletSpeed;
   GameHandler handler;
   
-  public Bullet(double x, double y, double angle, int speed, ObjectID id, GameHandler handler) {
+  public Bullet(double x, double y, double a, int speed, ObjectID id, GameHandler handler) {
     super(x, y, id);
-    this.angle = angle;
+    angle = a;
+    width = 5;
+    height = 5;
     bulletSpeed = speed;
     this.handler = handler;
   }
@@ -34,22 +34,21 @@ public class Bullet extends GameObject {
     AffineTransform old = graphics2D.getTransform();
     
     graphics2D.setColor(Color.blue);
-    graphics2D.fillRect((int)x, (int)y, bulletWidth, bulletHeight);
+    graphics2D.fillRect((int)x, (int)y, width, height);
     
     graphics2D.setTransform(old);
   }
   
   @Override
   public Rectangle getBounds() {
-    return new Rectangle((int)x, (int)y, bulletWidth, bulletHeight);
+    return new Rectangle((int)x, (int)y, width, height);
   }
   
-  public double getAngle() {
-    return angle;
+  @Override
+  public Shape getShape() {
+    return new Rectangle2D.Double(x, y, width, height);
   }
-  public void setAngle(double angle) {
-    this.angle = angle;
-  }
+  
   public int getSpeed() {
     return bulletSpeed;
   }

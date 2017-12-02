@@ -9,12 +9,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class TankPlayer1 extends GameObject {
-  public final int tankWidth = 64;
-  public final int tankHeight = 64;
-  private double angle;
   private int tmpAngle;
-  private Shape tankShape = null;
-  private Area tankArea = null;
   
   private BufferedImage tank;
   private int tileSize;
@@ -23,10 +18,12 @@ public class TankPlayer1 extends GameObject {
 
   GameHandler handler;
   
-  public TankPlayer1(double x, double y, int angle, ObjectID id, GameHandler handler) {
+  public TankPlayer1(double x, double y, int a, ObjectID id, GameHandler handler) {
     super(x, y, id);
-    this.angle = Math.toRadians(angle);
-    tmpAngle = angle;
+    angle = Math.toRadians(a);
+    width = 64;
+    height = 64;
+    tmpAngle = a;
     
     ImageLoader loader = new ImageLoader();
     BufferedImage tankStrip = loader.loadImage("/Tank_blue_heavy_strip60.png");
@@ -34,9 +31,6 @@ public class TankPlayer1 extends GameObject {
     tank = tankStrip.getSubimage(0 * tileSize, 0, tileSize, tileSize);
 
     reloadTime = 0;
-    
-    tankShape = new Rectangle2D.Double(x, y, tankWidth, tankHeight);
-    tankArea = new Area(tankShape);
     
     this.handler = handler;
   }
@@ -78,7 +72,7 @@ public class TankPlayer1 extends GameObject {
     if (handler.isShootPlayer1()) {
       if (reloadTime == 0) {
         //bullet takes (x, y, angle, speed, id, handler)
-        handler.addObject(new Bullet(x + tankWidth / 2, y + tankHeight / 2, angle, 8, ObjectID.Bullet, handler));
+        handler.addObject(new Bullet(x + width / 2, y + height / 2, angle, 8, ObjectID.Bullet, handler));
         reloadTime = 100;
       } else {
         reloadTime -= 1;
@@ -104,21 +98,23 @@ public class TankPlayer1 extends GameObject {
     AffineTransform old = graphics2D.getTransform();
     
     //rotating tank around center
-    graphics2D.rotate(angle, x + tankWidth / 2, y + tankHeight / 2);
-    graphics2D.drawImage(tank, (int)x, (int)y, tankWidth, tankHeight, null);
+    graphics2D.rotate(angle, x + width / 2, y + height / 2);
+    graphics2D.drawImage(tank, (int)x, (int)y, width, height, null);
     
     graphics2D.setTransform(old);
   }
   
   @Override
   public Rectangle getBounds() {
-    return new Rectangle((int)x, (int)y, tankWidth, tankHeight);
+    return new Rectangle((int)x, (int)y, width, height);
+  }
+  
+  @Override
+  public Shape getShape() {
+    return new Rectangle2D.Double(x, y, width, height);
   }
  
   private void collision() {
-    double tmpAngle;
-    Area tmpArea;
-    Rectangle tmpRec;
     boolean collides;
     TankCollision collisionCheck = new TankCollision();
     
@@ -128,49 +124,12 @@ public class TankPlayer1 extends GameObject {
       if (tmpObj.getID() == ObjectID.DestructibleBlock || tmpObj.getID() == ObjectID.IndestructibleBlock ||
               tmpObj.getID() == ObjectID.Player2) {
         
-        //need angle, area of both objects, bounds of both objects
-        if (tmpObj.getID() != ObjectID.Player2) {
-          tmpAngle = 0;
-          
-          if (tmpObj.getID() == ObjectID.DestructibleBlock) {
-            DestructibleBlock tmpBlock;
-            tmpBlock = (DestructibleBlock) tmpObj;
-            
-            tmpArea = tmpBlock.getArea();
-            tmpRec = tmpBlock.getBounds();
-          } else {
-            IndestructibleBlock tmpBlock;
-            tmpBlock = (IndestructibleBlock) tmpObj;
-            
-            tmpArea = tmpBlock.getArea();
-            tmpRec = tmpBlock.getBounds();
-          }
-          
-        } else {
-          TankPlayer2 tmpTank;
-          tmpTank = (TankPlayer2) tmpObj;
-          
-          tmpAngle = tmpTank.getAngle();
-          tmpArea = tmpTank.getArea();
-          tmpRec = tmpTank.getBounds();
-        }
-        
-        collides = collisionCheck.collides(this.getArea(), angle, this.getBounds(), tmpArea, tmpAngle, tmpRec);
+        collides = collisionCheck.collides(this.getShape(), angle, tmpObj.getShape(), tmpObj.getAngle());
         
         if (collides) {
-          
+          //TO DO
         }
       }
     }
-  }
-  
-  public double getAngle() {
-    return angle;
-  }
-  public void setAngle(double angle) {
-    this.angle = angle;
-  }
-  public Area getArea() {
-    return tankArea;
   }
 }

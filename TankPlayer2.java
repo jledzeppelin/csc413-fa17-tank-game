@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,12 +9,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class TankPlayer2 extends GameObject {
-  public final int tankWidth = 64;
-  public final int tankHeight = 64;
-  private double angle;
   private int tmpAngle;
-  private Shape tankShape = null;
-  private Area tankArea = null;
   
   private BufferedImage tank;
   private int tileSize;
@@ -24,10 +18,12 @@ public class TankPlayer2 extends GameObject {
 
   GameHandler handler;
   
-  public TankPlayer2(double x, double y, int angle, ObjectID id, GameHandler handler) {
+  public TankPlayer2(double x, double y, int a, ObjectID id, GameHandler handler) {
     super(x, y, id);
-    this.angle = Math.toRadians(angle);
-    tmpAngle = angle;
+    angle = Math.toRadians(a);
+    width = 64;
+    height = 64;
+    tmpAngle = a;
     
     ImageLoader loader = new ImageLoader();
     BufferedImage tankStrip = loader.loadImage("/Tank_red_heavy_strip60.png");
@@ -36,15 +32,14 @@ public class TankPlayer2 extends GameObject {
 
     reloadTime = 0;
     
-    tankShape = new Rectangle2D.Double(x, y, tankWidth, tankHeight);
-    tankArea = new Area(tankShape);
-    
     this.handler = handler;
   }
   
   @Override
   public void tick() {
     angle = Math.toRadians(tmpAngle);
+    
+    collision();
     
     if (handler.isForwardPlayer2()) {
       x += Math.cos(angle);
@@ -76,7 +71,7 @@ public class TankPlayer2 extends GameObject {
     
     if (handler.isShootPlayer2()) {
       if (reloadTime == 0) {
-        handler.addObject(new Bullet(x + tankWidth / 2, y + tankHeight / 2, angle, 8, ObjectID.Bullet, handler));
+        handler.addObject(new Bullet(x + width / 2, y + height / 2, angle, 8, ObjectID.Bullet, handler));
         reloadTime = 100;
       } else {
         reloadTime -= 1;
@@ -101,45 +96,40 @@ public class TankPlayer2 extends GameObject {
     graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     AffineTransform old = graphics2D.getTransform();
     
-    graphics2D.rotate(angle, x + tankWidth / 2, y + tankHeight / 2);
-    graphics2D.drawImage(tank, (int)x, (int)y, tankWidth, tankHeight, null);
+    //rotating tank around center
+    graphics2D.rotate(angle, x + width / 2, y + height / 2);
+    graphics2D.drawImage(tank, (int)x, (int)y, width, height, null);
     
     graphics2D.setTransform(old);
   }
   
   @Override
   public Rectangle getBounds() {
-    return new Rectangle((int)x, (int)y, tankWidth, tankHeight);
+    return new Rectangle((int)x, (int)y, width, height);
   }
   
-  
+  @Override
+  public Shape getShape() {
+    return new Rectangle2D.Double(x, y, width, height);
+  }
+ 
   private void collision() {
-    double tmpAngle;
-    TankPlayer2 tmpTank;
+    boolean collides;
+    TankCollision collisionCheck = new TankCollision();
     
     for (int i = 0; i < handler.obj.size(); i++) {
       GameObject tmpObj = handler.obj.get(i);
       
-      if (tmpObj.getID() == ObjectID.DestructibleBlock || tmpObj.getID() == ObjectID.DestructibleBlock ||
-              tmpObj.getID() == ObjectID.Player2) {
-        if (tmpObj.getID() != ObjectID.Player2) {
-          tmpAngle = 0;
-        } else {
-          tmpTank = (TankPlayer2) tmpObj;
-          tmpAngle = tmpTank.getAngle();
-        }
+      if (tmpObj.getID() == ObjectID.DestructibleBlock || tmpObj.getID() == ObjectID.IndestructibleBlock ||
+              tmpObj.getID() == ObjectID.Player1) {
         
+        collides = collisionCheck.collides(this.getShape(), angle, tmpObj.getShape(), tmpObj.getAngle());
+        
+        if (collides) {
+          x += 0;
+          y += 0;
+        }
       }
     }
-  }
-  
-  public double getAngle() {
-    return angle;
-  }
-  public void setAngle(double angle) {
-    this.angle = angle;
-  }
-  public Area getArea() {
-    return tankArea;
   }
 }

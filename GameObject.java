@@ -1,13 +1,14 @@
 import java.awt.Rectangle;
 import java.awt.Graphics;
+import java.awt.Shape;
 
 public abstract class GameObject {
   public final int blockWidth = 32;
   public final int blockHeight = 32;
   
-  protected double x, y;
-  protected float velocityX = 0; //may not need these
-  protected float velocityY = 0;
+  protected double x, y, angle;
+  protected int width;
+  protected int height;
   protected ObjectID id;
   
   public GameObject(double x, double y, ObjectID id) {
@@ -20,6 +21,7 @@ public abstract class GameObject {
   public abstract void tick();
   public abstract void render(Graphics graphics);
   public abstract Rectangle getBounds();
+  public abstract Shape getShape();
   
   //setters and getters
   public double getX() {
@@ -28,23 +30,29 @@ public abstract class GameObject {
   public double getY() {
     return y;
   }
+  public double getAngle() {
+    return angle;
+  }
+  public int getWidth() {
+    return width;
+  }
+  public int getHeigh() {
+    return height;
+  }
   public void setX(double x) {
     this.x = x;
   }
   public void setY(double y) {
     this.y = y;
   }
-  public float getVelocityX() {
-    return velocityX;
+  public void setAngle(double a) {
+    this.angle = a;
   }
-  public float getVelocityY() {
-    return velocityY;
+  public void setWidth(int w) {
+    this.width = w;
   }
-  public void setVelocityX(float velX) {
-    velocityX = velX;
-  }
-  public void setVelocityY(float velY) {
-    velocityY = velY;
+  public void setHeight(int h) {
+    this.height = h;
   }
   public ObjectID getID() {
     return id;
