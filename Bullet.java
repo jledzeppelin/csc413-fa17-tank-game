@@ -16,6 +16,9 @@ public class Bullet extends GameObject {
   GameHandler handler;
   ObjectID enemy = null;
   
+  SoundPlayer soundPlayer;
+  private String tankHit = "tankHit.wav";
+  
   public Bullet(double x, double y, double a, int speed, ObjectID id, ObjectID origin, GameHandler handler) {
     super(x, y, id);
     angle = a;
@@ -23,6 +26,7 @@ public class Bullet extends GameObject {
     height = 17;
     bulletSpeed = speed;
     this.handler = handler;
+    soundPlayer = new SoundPlayer();
     
     xSpeed = Math.cos(angle) * bulletSpeed;
     ySpeed = Math.sin(angle) * bulletSpeed;
@@ -58,10 +62,10 @@ public class Bullet extends GameObject {
           }
           if (tmpObj.getID() == enemy) {
             tmpObj.setHealth(tmpObj.getHealth() - 20);
+            soundPlayer.playSound(tankHit, 0);
           }
         }
-      }
-      
+      }  
       
     }
     
