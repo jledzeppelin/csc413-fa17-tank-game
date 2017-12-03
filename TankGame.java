@@ -48,7 +48,7 @@ public class TankGame extends Canvas implements Runnable {
     
     b = new Background();
     background = b.getBackground();
-    b1 = background.getSubimage(0, 0, 100, 100);
+    b1 = background.getSubimage(0, 0, WIDTH, WIDTH);
     
   }
   
@@ -127,11 +127,14 @@ public class TankGame extends Canvas implements Runnable {
     graphics.fillRect(WIDTH / 2 - 20, 0, 32, HEIGHT);
     
     //minimap
+    graphics.drawImage(b1, 400, 330, WIDTH/5, WIDTH/5, null);
     handler.renderMinimap(graphics, 400, 330);
     
     //health and lives
     graphics.setColor(Color.green);
     graphics.fillRect(0, 500, player1Health, 20);
+    
+    
     
     for (int i = 0; i < player1Lives; i++){
       graphics.drawImage(livesP1, 150 + 20 * i, 500, 20, 20, null);
