@@ -1,16 +1,25 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class IndestructibleBlock extends GameObject {
-  BufferedImage iBlock;
+  private Shape blockShape = null;
+  BufferedImage block;
   
-  public IndestructibleBlock(int x, int y, ObjectID id) {
+  public IndestructibleBlock(double x, double y, ObjectID id) {
     super(x, y, id);
-    ImageLoader loader = new ImageLoader();  
-    iBlock = loader.loadImage("/wall_Indestructible.png");
+    angle = Math.toRadians(0);
+    width = 32;
+    height = 32;
+    health = 100;
+    lives = 1;
+    blockShape = new Rectangle2D.Double(x, y, width, height);
     
+    ImageLoader loader = new ImageLoader();
+    block = loader.loadImage("/wall_indestructible.png");
   }
   
   @Override
@@ -20,20 +29,21 @@ public class IndestructibleBlock extends GameObject {
   
   @Override
   public void render(Graphics graphics) {
-    //graphics.setColor(Color.black);
-    //graphics.fillRect(x, y, 32, 32);
-    graphics.drawImage(iBlock, x, y, null);
+    graphics.drawImage(block, (int)x, (int)y, width, height, null);
   }
+  
   @Override
-  public void renderMini(Graphics graphics, int x1, int y1) {
-    //Graphics2d g2 = 
-    graphics.drawImage(iBlock, x/8 + x1, y/8 + y1, 32 / 8, 32 / 8, null);
-    //graphics.setColor(Color.blue);
-    //graphics.fillRect(x, y, 32, 32);
+  public void renderMini(Graphics graphics, int x, int y) {
+    graphics.drawImage(block, (int)this.x / 8 + x, (int)this.y / 8 + y, width / 8, height / 8, null);
   }
+  
   @Override
   public Rectangle getBounds() {
-    
-    return new Rectangle(x, y, iBlock.getWidth(), iBlock.getHeight());
+    return new Rectangle((int)x, (int)y, blockWidth, blockHeight);
+  }
+  
+  @Override
+  public Shape getShape() {
+    return blockShape;
   }
 }

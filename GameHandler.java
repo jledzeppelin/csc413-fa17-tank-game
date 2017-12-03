@@ -4,52 +4,53 @@ import java.awt.Graphics;
 public class GameHandler {
   ArrayList<GameObject> obj = new ArrayList<GameObject>();
   
-  //TO DO change to forward and back and rotate, add shooting
-  private boolean up = false;
-  private boolean down = false;
-  private boolean right = false;
-  private boolean left = false;
+  private boolean forwardP1 = false;
+  private boolean backwardP1 = false;
+  private boolean rotateRightP1 = false;
+  private boolean rotateLeftP1 = false;
+  private boolean shootP1 = false;
   
-  private boolean up2 = false;
-  private boolean down2 = false;
-  private boolean right2 = false;
-  private boolean left2 = false;
+  private boolean forwardP2 = false;
+  private boolean backwardP2 = false;
+  private boolean rotateRightP2 = false;
+  private boolean rotateLeftP2 = false;
+  private boolean shootP2 = false;
   
   public void tick() { 
-    //go through all game objects and tick
+    //tick all game objects
     for (int i = 0; i < obj.size(); i++) {
       GameObject tmpObj = obj.get(i);
       tmpObj.tick();
     }
   }
   
-  public void render(Graphics graphics, Camera p1) {
+  public void renderPlayer1(Graphics graphics, Camera camera) {
     for (int i = 0; i < obj.size(); i++) {
       GameObject tmpObj = obj.get(i);
-      if(tmpObj.getX() < p1.getX() + 501)
-      tmpObj.render(graphics);
-    }
-  }
-  
-  public void render2(Graphics graphics, Camera p2) {
-    for (int i = 0; i < obj.size(); i++) {
       
-      GameObject tmpObj = obj.get(i);
-      if( tmpObj.getX() > p2.getX() + 501)
+      if (tmpObj.getX() < camera.getX() + 481) {
         tmpObj.render(graphics);
+      }
     }
   }
   
-  public void renderMinimap(Graphics graphics,int x,int y) {
+  public void renderPlayer2(Graphics graphics, Camera camera) {
     for (int i = 0; i < obj.size(); i++) {
-      
       GameObject tmpObj = obj.get(i);
       
+      if (tmpObj.getX() > camera.getX() + 481) {
+        tmpObj.render(graphics);
+      }
+    }
+  }
+  
+  public void renderMinimap(Graphics graphics, int x, int y) {
+    for (int i = 0; i < obj.size(); i++) {
+      GameObject tmpObj = obj.get(i);  
       tmpObj.renderMini(graphics, x, y);
     }
   }
   
-  //add object to the list
   public void addObject(GameObject tmpObj) {
     obj.add(tmpObj);
   }
@@ -59,54 +60,66 @@ public class GameHandler {
   }
   
   //player 1
-  public boolean isUpPlayer1() {
-    return up;
+  public boolean isForwardPlayer1() {
+    return forwardP1;
   }
-  public boolean isDownPlayer1() {
-    return down;
+  public boolean isBackwardPlayer1() {
+    return backwardP1;
   }
   public boolean isRightPlayer1() {
-    return right;
+    return rotateRightP1;
   }
   public boolean isLeftPlayer1() {
-    return left;
+    return rotateLeftP1;
   }
-  public void setUpPlayer1(boolean up) {
-    this.up = up;
+  public boolean isShootPlayer1() {
+    return shootP1;
   }
-  public void setDownPlayer1(boolean down) {
-    this.down = down;
+  public void setForwardPlayer1(boolean forward) {
+    this.forwardP1 = forward;
+  }
+  public void setBackwardPlayer1(boolean backward) {
+    this.backwardP1 = backward;
   }
   public void setRightPlayer1(boolean right) {
-    this.right = right;
+    this.rotateRightP1 = right;
   }
   public void setLeftPlayer1(boolean left) {
-    this.left = left;
+    this.rotateLeftP1 = left;
+  }
+  public void setShootPlayer1(boolean shoot) {
+    this.shootP1 = shoot;
   }
   
   //player 2
-  public boolean isUpPlayer2() {
-    return up2;
+  public boolean isForwardPlayer2() {
+    return forwardP2;
   }
-  public boolean isDownPlayer2() {
-    return down2;
+  public boolean isBackwardPlayer2() {
+    return backwardP2;
   }
   public boolean isRightPlayer2() {
-    return right2;
+    return rotateRightP2;
   }
   public boolean isLeftPlayer2() {
-    return left2;
+    return rotateLeftP2;
   }
-  public void setUpPlayer2(boolean up) {
-    this.up2 = up;
+  public boolean isShootPlayer2() {
+    return shootP2;
   }
-  public void setDownPlayer2(boolean down) {
-    this.down2 = down;
+  public void setForwardPlayer2(boolean forward) {
+    this.forwardP2 = forward;
+  }
+  public void setBackwardPlayer2(boolean backward) {
+    this.backwardP2 = backward;
   }
   public void setRightPlayer2(boolean right) {
-    this.right2 = right;
+    this.rotateRightP2 = right;
   }
   public void setLeftPlayer2(boolean left) {
-    this.left2 = left;
+    this.rotateLeftP2 = left;
+  }
+  public void setShootPlayer2(boolean shoot) {
+    this.shootP2 = shoot;
   }
 }

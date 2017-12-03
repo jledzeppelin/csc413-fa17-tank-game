@@ -1,30 +1,31 @@
 
 public class Camera {
-  public static int WIDTH = 1000;
-  public static int HEIGHT = 563;
+  private int width;
+  private int height;
   private float x, y;
   
-  public Camera(float x, float y) {
+  public Camera(float x, float y, int width, int height) {
     this.x = x;
     this.y = y;
+    this.width = width;
+    this.height = height;
   }
   
-  public void tick(GameObject obj) {
-    //makes camera smooth
-    x += ((obj.getX() - x) - WIDTH / 4) * 0.05f;
-    y += ((obj.getY() - y) - HEIGHT / 2) * 0.05f;
+  public void tickPlayer1(GameObject obj) {
+    x += ((obj.getX() - x) - width / 4) * 0.05f;
+    y += ((obj.getY() - y) - height / 2) * 0.05f;
     
     if (x <= 0) x = 0;
     if (x >= 1100) x = 1100;
     if (y <= 0) y = 0;
     if (y >= 1065) y = 1065;
   }
-  public void tick2(GameObject obj) {
-    //makes camera smooth
-    x += ((obj.getX() - x) -  3 * WIDTH / 4) * 0.05f;
-    y += ((obj.getY() - y) - HEIGHT / 2) * 0.05f;
+  
+  public void tickPlayer2(GameObject obj) {
+    x += ((obj.getX() - x) - 3 * width / 4) * 0.05f;
+    y += ((obj.getY() - y) - height / 2) * 0.05f;
     
-    if (x <= -520) x = -520;
+    if (x <= -510) x = -510;
     if (x >= 605) x = 605;
     if (y <= 0) y = 0;
     if (y >= 1065) y = 1065;

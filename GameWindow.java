@@ -1,7 +1,6 @@
 import java.awt.Dimension;
-//import java.awt.event.WindowEvent;
-//import java.awt.event.WindowAdapter;
 import javax.swing.JFrame;
+
 
 public class GameWindow {
   public GameWindow(int width, int height, String title, TankGame game) {

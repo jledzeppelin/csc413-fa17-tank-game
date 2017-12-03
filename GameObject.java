@@ -1,15 +1,19 @@
 import java.awt.Rectangle;
 import java.awt.Graphics;
+import java.awt.Shape;
 
 public abstract class GameObject {
-  protected int x, y;
-  protected float velocityX = 0;
-  protected float velocityY = 0;
-  protected ObjectID id;
-  protected int health = 100;
-  protected int lives = 2;
+  public final int blockWidth = 32;
+  public final int blockHeight = 32;
   
-  public GameObject(int x, int y, ObjectID id) {
+  protected double x, y, angle;
+  protected int width;
+  protected int height;
+  protected int health;
+  protected int lives;
+  protected ObjectID id;
+  
+  public GameObject(double x, double y, ObjectID id) {
     this.x = x;
     this.y = y;
     this.id = id;
@@ -20,43 +24,55 @@ public abstract class GameObject {
   public abstract void render(Graphics graphics);
   public abstract void renderMini(Graphics graphics, int x, int y);
   public abstract Rectangle getBounds();
+  public abstract Shape getShape();
   
   //setters and getters
-  public int getX() {
+  public double getX() {
     return x;
   }
-  public int getY() {
+  public double getY() {
     return y;
   }
-  public void setX(int x) {
-    this.x = x;
+  public double getAngle() {
+    return angle;
   }
-  public void setY(int y) {
-    this.y = y;
+  public int getWidth() {
+    return width;
   }
-  public float getVelocityX() {
-    return velocityX;
-  }
-  public float getVelocityY() {
-    return velocityY;
-  }
-  public void setVelocityX(float velX) {
-    velocityX = velX;
-  }
-  public void setVelocityY(float velY) {
-    velocityY = velY;
-  }
-  public ObjectID getID() {
-    return id;
-  }
- 
-  public void setID(ObjectID id) {
-    this.id = id;
+  public int getHeigh() {
+    return height;
   }
   public int getHealth() {
     return health;
   }
   public int getLives() {
     return lives;
+  }
+  public void setX(double x) {
+    this.x = x;
+  }
+  public void setY(double y) {
+    this.y = y;
+  }
+  public void setAngle(double a) {
+    this.angle = a;
+  }
+  public void setWidth(int w) {
+    this.width = w;
+  }
+  public void setHeight(int h) {
+    this.height = h;
+  }
+  public void setHealth(int h) {
+    this.health = h;
+  }
+  public void setLives(int l) {
+    this.lives = l;
+  }
+  public ObjectID getID() {
+    return id;
+  }
+  public void setID(ObjectID id) {
+    this.id = id;
   }
 }
