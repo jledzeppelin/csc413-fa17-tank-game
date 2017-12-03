@@ -17,10 +17,13 @@ public class TankGame extends Canvas implements Runnable {
   public static int player2Health;
   public static int player2Lives;
   
+  private BufferedImage separator = null;
   private BufferedImage level = null;
   private BufferedImage livesP1 = null;
   private BufferedImage livesP2 = null;
   private BufferedImage floor = null;
+  private Background backgroundObj;
+  private BufferedImage backgroundImg;
   private int tileSize;
   
   boolean gameOver = false;
@@ -36,12 +39,16 @@ public class TankGame extends Canvas implements Runnable {
     
     ImageLoader loader = new ImageLoader();
     level = loader.loadImage("/tankGameMap.png");
+    separator = loader.loadImage("/wall_red.png");
     
     BufferedImage livesStrip = loader.loadImage("/Ball_strip9.png");
     tileSize = livesStrip.getWidth() / 9;
     livesP1 = livesStrip.getSubimage(3 * tileSize, 0, tileSize, tileSize);
     livesP2 = livesStrip.getSubimage(6 * tileSize, 0, tileSize, tileSize);
-    floor = loader.loadImage("/background_tile.png");
+    
+    backgroundObj = new Background();
+    floor = backgroundObj.getBackground();
+    backgroundImg = floor.getSubimage(0, 0, WIDTH, HEIGHT);
     
     loadLevel(level);
   }
@@ -108,6 +115,7 @@ public class TankGame extends Canvas implements Runnable {
     //background
     graphics.setColor(Color.lightGray);
     graphics.fillRect(0, 0, WIDTH, HEIGHT);
+    graphics.drawImage(floor, 0, 0, null);
     
     //cameras
     graphics2D.translate(-cameraPlayer1.getX(), -cameraPlayer1.getY());    
@@ -119,10 +127,12 @@ public class TankGame extends Canvas implements Runnable {
     graphics2D.translate(cameraPlayer2.getX(), cameraPlayer2.getY());
     
     //separator
-    graphics.setColor(Color.black);
-    graphics.fillRect(WIDTH / 2, 0, 32, HEIGHT);
+    for (int yy = 0; yy < HEIGHT; yy += 32) {
+      graphics.drawImage(separator, WIDTH / 2 - 20, yy, 32, 32, null);
+    }
     
     //minimap
+    graphics.drawImage(backgroundImg, 400, 330, WIDTH / 5, WIDTH / 5, null);
     handler.renderMinimap(graphics, 400, 330);
     
     //health and lives

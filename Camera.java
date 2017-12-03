@@ -25,7 +25,7 @@ public class Camera {
     x += ((obj.getX() - x) - 3 * width / 4) * 0.05f;
     y += ((obj.getY() - y) - height / 2) * 0.05f;
     
-    if (x <= -500) x = -500;
+    if (x <= -510) x = -510;
     if (x >= 605) x = 605;
     if (y <= 0) y = 0;
     if (y >= 1065) y = 1065;

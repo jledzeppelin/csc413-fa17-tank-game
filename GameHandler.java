@@ -28,7 +28,7 @@ public class GameHandler {
     for (int i = 0; i < obj.size(); i++) {
       GameObject tmpObj = obj.get(i);
       
-      if (tmpObj.getX() < camera.getX() + 501) {
+      if (tmpObj.getX() < camera.getX() + 481) {
         tmpObj.render(graphics);
       }
     }
@@ -38,7 +38,7 @@ public class GameHandler {
     for (int i = 0; i < obj.size(); i++) {
       GameObject tmpObj = obj.get(i);
       
-      if (tmpObj.getX() > camera.getX() + 501) {
+      if (tmpObj.getX() > camera.getX() + 481) {
         tmpObj.render(graphics);
       }
     }
