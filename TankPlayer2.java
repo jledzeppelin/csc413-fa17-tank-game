@@ -88,7 +88,7 @@ public class TankPlayer2 extends GameObject {
     if (handler.isShootPlayer2()) {
       if (reloadTime == 0) {
         handler.addObject(new Bullet(x + width / 2, y + height / 2, angle, 8, ObjectID.Bullet, this.getID(), handler));
-        soundPlayer.playSound(shotFired);
+        soundPlayer.playSound(shotFired, 0);
         
         reloadTime = 90;
       } else {

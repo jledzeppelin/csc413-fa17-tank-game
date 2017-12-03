@@ -25,6 +25,9 @@ public class TankGame extends Canvas implements Runnable {
   private BufferedImage backgroundImg;
   
   boolean gameOver = false;
+  String message;
+  //SoundPlayer soundPlayer;
+  //private String ending = "endingScreen.wav";
           
   public TankGame() {
     new GameWindow(WIDTH, HEIGHT, "Tank Game", this);
@@ -38,6 +41,7 @@ public class TankGame extends Canvas implements Runnable {
     ImageLoader loader = new ImageLoader();
     level = loader.loadImage("res/tankGameMap.png");
     separator = loader.loadImage("res/wall_red.png");
+    //soundPlayer = new SoundPlayer();
     
     lives = loader.loadImage("res/heart.png");
     
@@ -76,6 +80,7 @@ public class TankGame extends Canvas implements Runnable {
         
         if (player1Health <= 0 && player1Lives == 0) {
           gameOver = true;
+          message = "PLAYER 2 WINS!";
         }
       }
       
@@ -86,6 +91,7 @@ public class TankGame extends Canvas implements Runnable {
         
         if (player2Health <= 0 && player2Lives == 0) {
           gameOver = true;
+          message = "PLAYER 1 WINS!";
         }
       }
     }
@@ -154,7 +160,7 @@ public class TankGame extends Canvas implements Runnable {
     }
     
     if (gameOver) {
-      String message = "GAME OVER!";
+      //soundPlayer.playSound(ending, 0);
       Font gameOverFont = new Font("Monotype Corsiva", Font.BOLD, 80);
       
       FontMetrics metrics = graphics.getFontMetrics(gameOverFont);
