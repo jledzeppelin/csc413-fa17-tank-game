@@ -38,8 +38,19 @@ public class TankPlayer2 extends GameObject {
   public void tick() {
     angle = Math.toRadians(tmpAngle);
     
-    x += xSpeed;
-    y += ySpeed;
+    if (health <= 0) {
+      if (lives > 0) {
+        lives--;
+        if (lives != 0) {
+          health = 100;
+        }
+      } else {
+        handler.removeObject(this);
+      }
+    }
+    
+    x += xSpeed * 2;
+    y += ySpeed * 2;
     collision();
     
     if (handler.isForwardPlayer2()) {
@@ -72,8 +83,8 @@ public class TankPlayer2 extends GameObject {
     
     if (handler.isShootPlayer2()) {
       if (reloadTime == 0) {
-        handler.addObject(new Bullet(x + width / 2, y + height / 2, angle, 8, ObjectID.Bullet, ObjectID.Player2, handler));
-        reloadTime = 100;
+        handler.addObject(new Bullet(x + width / 2, y + height / 2, angle, 8, ObjectID.Bullet, this.getID(), handler));
+        reloadTime = 90;
       } else {
         reloadTime -= 1;
       }
@@ -122,13 +133,13 @@ public class TankPlayer2 extends GameObject {
     for (int i = 0; i < handler.obj.size(); i++) {
       GameObject tmpObj = handler.obj.get(i);
       
-        if (tmpObj.getID() == ObjectID.IndestructibleBlock || tmpObj.getID() == ObjectID.DestructibleBlock ||
-                tmpObj.getID() == ObjectID.Player1){
-          if (getBounds().intersects(tmpObj.getBounds())) {
-            x += xSpeed * -1;
-            y += ySpeed * -1;
-          }
+      if (tmpObj.getID() == ObjectID.IndestructibleBlock || tmpObj.getID() == ObjectID.DestructibleBlock || 
+              tmpObj.getID() == ObjectID.Player1){
+        if (getBounds().intersects(tmpObj.getBounds())) {
+          x += xSpeed * -1;
+          y += ySpeed * -1;
         }
+      }
     }
   }
 }

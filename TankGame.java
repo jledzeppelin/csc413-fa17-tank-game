@@ -10,17 +10,20 @@ public class TankGame extends Canvas implements Runnable {
   private Thread thread;
   private GameHandler handler;
   
-  private Camera cameraPlayer1;
-  private Camera cameraPlayer2;
+  private Camera cameraPlayer1 = null;
+  private Camera cameraPlayer2 = null;
   public static int player1Health;
   public static int player1Lives;
   public static int player2Health;
   public static int player2Lives;
   
-  private BufferedImage level;
-  private BufferedImage livesP1;
-  private BufferedImage livesP2;
+  private BufferedImage level = null;
+  private BufferedImage livesP1 = null;
+  private BufferedImage livesP2 = null;
+  private BufferedImage floor = null;
   private int tileSize;
+  
+  boolean gameOver = false;
           
   public TankGame() {
     new GameWindow(WIDTH, HEIGHT, "Tank Game", this);
@@ -38,6 +41,7 @@ public class TankGame extends Canvas implements Runnable {
     tileSize = livesStrip.getWidth() / 9;
     livesP1 = livesStrip.getSubimage(3 * tileSize, 0, tileSize, tileSize);
     livesP2 = livesStrip.getSubimage(6 * tileSize, 0, tileSize, tileSize);
+    floor = loader.loadImage("/background_tile.png");
     
     loadLevel(level);
   }
@@ -67,12 +71,20 @@ public class TankGame extends Canvas implements Runnable {
         cameraPlayer1.tickPlayer1(handler.obj.get(i));
         player1Health = handler.obj.get(i).getHealth();
         player1Lives = handler.obj.get(i).getLives();
+        
+        if (player1Health <= 0 && player1Lives == 0) {
+          gameOver = true;
+        }
       }
       
       if (handler.obj.get(i).getID() == ObjectID.Player2) {
         cameraPlayer2.tickPlayer2(handler.obj.get(i));
         player2Health = handler.obj.get(i).getHealth();
         player2Lives = handler.obj.get(i).getLives();
+        
+        if (player2Health <= 0 && player2Lives == 0) {
+          gameOver = true;
+        }
       }
     }
     
@@ -98,7 +110,7 @@ public class TankGame extends Canvas implements Runnable {
     graphics.fillRect(0, 0, WIDTH, HEIGHT);
     
     //cameras
-    graphics2D.translate(-cameraPlayer1.getX(), -cameraPlayer1.getY());
+    graphics2D.translate(-cameraPlayer1.getX(), -cameraPlayer1.getY());    
     handler.renderPlayer1(graphics, cameraPlayer1);
     graphics2D.translate(cameraPlayer1.getX(), cameraPlayer1.getY());
     
@@ -114,20 +126,42 @@ public class TankGame extends Canvas implements Runnable {
     handler.renderMinimap(graphics, 400, 330);
     
     //health and lives
+    graphics.setColor(Color.gray);
+    graphics.fillRect(0, 500, 100, 20);
     graphics.setColor(Color.green);
     graphics.fillRect(0, 500, player1Health, 20);
+    graphics.setColor(Color.black);
+    graphics.drawRect(0, 500, 100, 20);
     
     for (int i = 0; i < player1Lives; i++){
       graphics.drawImage(livesP1, 150 + 20 * i, 500, 20, 20, null);
     }
     
+    graphics.setColor(Color.gray);
+    graphics.fillRect(600, 500, 100, 20);
     graphics.setColor(Color.green);
     graphics.fillRect(600, 500, player2Health, 20);
+    graphics.setColor(Color.black);
+    graphics.drawRect(600, 500, 100, 20);
     
     for (int i = 0; i < player2Lives; i++){
       graphics.drawImage(livesP2, 750 + 20 * i, 500, 20, 20, null);
     }
     
+    if (gameOver) {
+      String message = "GAME OVER!";
+      Font gameOverFont = new Font("Monotype Corsiva", Font.BOLD, 80);
+      
+      FontMetrics metrics = graphics.getFontMetrics(gameOverFont);
+      int xPos = (WIDTH - metrics.stringWidth(message)) / 2;
+      int yPos = (HEIGHT - metrics.getHeight()) / 2 + metrics.getAscent();
+      graphics.setFont(gameOverFont);
+      
+      graphics.setColor(Color.black);
+      graphics.fillRect(0, 0, WIDTH, HEIGHT);
+      graphics.setColor(Color.white);
+      graphics.drawString(message, xPos, yPos - 15);
+    }
     
     //***************** End of drawing section
     

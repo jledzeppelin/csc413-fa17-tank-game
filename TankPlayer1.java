@@ -5,7 +5,6 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 public class TankPlayer1 extends GameObject {
@@ -39,12 +38,23 @@ public class TankPlayer1 extends GameObject {
   public void tick() {
     angle = Math.toRadians(tmpAngle);
     
-    x += xSpeed;
-    y += ySpeed;
+    if (health <= 0) { //likely more complicated than it needs to be
+      if (lives > 0) {
+        lives--;
+        if (lives != 0) {
+          health = 100;
+        }
+      } else {
+        handler.removeObject(this);
+      }
+    }
+    
+    x += xSpeed * 2; //could add speed variable
+    y += ySpeed * 2;
     collision();
     
     if (handler.isForwardPlayer1()) {
-      xSpeed = Math.cos(angle); //could add a speed variable to change in TankGame
+      xSpeed = Math.cos(angle);
       ySpeed = Math.sin(angle);
     } else if (!handler.isBackwardPlayer1()) {
       xSpeed = 0;
@@ -74,8 +84,8 @@ public class TankPlayer1 extends GameObject {
     if (handler.isShootPlayer1()) {
       if (reloadTime == 0) {
         //bullet takes (x, y, angle, speed, id, handler)
-        handler.addObject(new Bullet(x + width / 2, y + height / 2, angle, 8, ObjectID.Bullet, ObjectID.Player1, handler));
-        reloadTime = 100;
+        handler.addObject(new Bullet(x + width / 2, y + height / 2, angle, 8, ObjectID.Bullet, this.getID(), handler));
+        reloadTime = 90;
       } else {
         reloadTime -= 1;
       }
@@ -125,13 +135,13 @@ public class TankPlayer1 extends GameObject {
     for (int i = 0; i < handler.obj.size(); i++) {
       GameObject tmpObj = handler.obj.get(i);
       
-        if (tmpObj.getID() == ObjectID.IndestructibleBlock || tmpObj.getID() == ObjectID.DestructibleBlock ||
-                tmpObj.getID() == ObjectID.Player2){
-          if (getBounds().intersects(tmpObj.getBounds())) {
-            x += xSpeed * -1;
-            y += ySpeed * -1;
-          }
+      if (tmpObj.getID() == ObjectID.IndestructibleBlock || tmpObj.getID() == ObjectID.DestructibleBlock ||
+              tmpObj.getID() == ObjectID.Player2) {
+        if (getBounds().intersects(tmpObj.getBounds())) {
+          x += xSpeed * -1;
+          y += ySpeed * -1;
         }
+      }
     }
     /*
     boolean collides;
