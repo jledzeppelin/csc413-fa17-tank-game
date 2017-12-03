@@ -19,12 +19,10 @@ public class TankGame extends Canvas implements Runnable {
   
   private BufferedImage separator = null;
   private BufferedImage level = null;
-  private BufferedImage livesP1 = null;
-  private BufferedImage livesP2 = null;
+  private BufferedImage lives = null;
   private BufferedImage floor = null;
   private Background backgroundObj;
   private BufferedImage backgroundImg;
-  private int tileSize;
   
   boolean gameOver = false;
           
@@ -41,10 +39,7 @@ public class TankGame extends Canvas implements Runnable {
     level = loader.loadImage("/tankGameMap.png");
     separator = loader.loadImage("/wall_red.png");
     
-    BufferedImage livesStrip = loader.loadImage("/Ball_strip9.png");
-    tileSize = livesStrip.getWidth() / 9;
-    livesP1 = livesStrip.getSubimage(3 * tileSize, 0, tileSize, tileSize);
-    livesP2 = livesStrip.getSubimage(6 * tileSize, 0, tileSize, tileSize);
+    lives = loader.loadImage("/heart.png");
     
     backgroundObj = new Background();
     floor = backgroundObj.getBackground();
@@ -144,7 +139,7 @@ public class TankGame extends Canvas implements Runnable {
     graphics.drawRect(0, 500, 100, 20);
     
     for (int i = 0; i < player1Lives; i++){
-      graphics.drawImage(livesP1, 150 + 20 * i, 500, 20, 20, null);
+      graphics.drawImage(lives, 120 + 30 * i, 491, 34, 34, null);
     }
     
     graphics.setColor(Color.gray);
@@ -155,7 +150,7 @@ public class TankGame extends Canvas implements Runnable {
     graphics.drawRect(600, 500, 100, 20);
     
     for (int i = 0; i < player2Lives; i++){
-      graphics.drawImage(livesP2, 750 + 20 * i, 500, 20, 20, null);
+      graphics.drawImage(lives, 720 + 30 * i, 491, 34, 34, null);
     }
     
     if (gameOver) {
