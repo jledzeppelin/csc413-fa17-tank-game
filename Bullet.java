@@ -14,7 +14,7 @@ public class Bullet extends GameObject {
   private double xSpeed;
   private double ySpeed;
   GameHandler handler;
-  ObjectID enemyID;
+  ObjectID enemy = null;
   
   public Bullet(double x, double y, double a, int speed, ObjectID id, ObjectID origin, GameHandler handler) {
     super(x, y, id);
@@ -28,14 +28,14 @@ public class Bullet extends GameObject {
     ySpeed = Math.sin(angle) * bulletSpeed;
     
     ImageLoader loader = new ImageLoader();
-    BufferedImage bulletStrip = loader.loadImage("/Shell_heavy_strip60.png");
+    BufferedImage bulletStrip = loader.loadImage("res/Shell_heavy_strip60.png");
     tileSize = bulletStrip.getWidth() / 60;
     bullet = bulletStrip.getSubimage(30 * tileSize, 0, tileSize, tileSize);
     
     if (origin == ObjectID.Player1) {
-      enemyID = ObjectID.Player2;
+      enemy = ObjectID.Player2;
     } else {
-      enemyID = ObjectID.Player1;
+      enemy = ObjectID.Player1;
     }
   }
   
@@ -49,15 +49,20 @@ public class Bullet extends GameObject {
       
       // TO DO change collision with enemy to be done by player classes
       if (tmpObj.getID() == ObjectID.IndestructibleBlock || tmpObj.getID() == ObjectID.DestructibleBlock ||
-                tmpObj.getID() == enemyID) {
+              tmpObj.getID() == enemy) {
         if (getBounds().intersects(tmpObj.getBounds())) {
           handler.removeObject(this);
           
           if (tmpObj.getID() == ObjectID.DestructibleBlock) {
             handler.removeObject(tmpObj);
           }
+          if (tmpObj.getID() == enemy) {
+            tmpObj.setHealth(tmpObj.getHealth() - 20);
+          }
         }
       }
+      
+      
     }
     
   }

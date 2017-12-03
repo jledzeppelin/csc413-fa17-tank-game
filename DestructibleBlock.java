@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -19,7 +18,7 @@ public class DestructibleBlock extends GameObject {
     blockShape = new Rectangle2D.Double(x, y, width, height);
     
     ImageLoader loader = new ImageLoader();
-    block = loader.loadImage("/wall.png");
+    block = loader.loadImage("res/wall.png");
   }
   
   @Override

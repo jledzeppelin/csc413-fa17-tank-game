@@ -1,26 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.image.*;
 
 public class Background {
-  
   BufferedImage background;
   BufferedImage backgroundTile;
   Graphics2D g2;
   int x1,y1;
-  Background(){
-    
+  
+  Background(){  
     ImageLoader loader = new ImageLoader();
-    backgroundTile = loader.loadImage("/background_tile.png");
+    backgroundTile = loader.loadImage("res/background_tile.png");
     background = new BufferedImage(2000, 1000, BufferedImage.TYPE_INT_RGB);
     g2 = (Graphics2D)background.getGraphics();
     addBackground();
@@ -34,11 +23,8 @@ public class Background {
     }
   }
  
-  
 
   public BufferedImage getBackground(){
     return background;
   }
- 
-  
 }

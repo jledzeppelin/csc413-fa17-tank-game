@@ -16,6 +16,9 @@ public class TankPlayer2 extends GameObject {
   private int reloadTime;
   GameHandler handler;
   
+  SoundPlayer soundPlayer;
+  private String shotFired = "res/turret.wav";
+  
   public TankPlayer2(double x, double y, int a, ObjectID id, GameHandler handler) {
     super(x, y, id);
     angle = Math.toRadians(a);
@@ -24,9 +27,10 @@ public class TankPlayer2 extends GameObject {
     tmpAngle = a;
     health = 100;
     lives = 2;
+    soundPlayer = new SoundPlayer();
     
     ImageLoader loader = new ImageLoader();
-    BufferedImage tankStrip = loader.loadImage("/Tank_red_heavy_strip60.png");
+    BufferedImage tankStrip = loader.loadImage("res/Tank_red_heavy_strip60.png");
     tileSize = tankStrip.getWidth() / 60;
     tank = tankStrip.getSubimage(0 * tileSize, 0, tileSize, tileSize);
 
@@ -38,8 +42,19 @@ public class TankPlayer2 extends GameObject {
   public void tick() {
     angle = Math.toRadians(tmpAngle);
     
-    x += xSpeed;
-    y += ySpeed;
+    if (health <= 0) {
+      if (lives > 0) {
+        lives--;
+        if (lives != 0) {
+          health = 100;
+        }
+      } else {
+        handler.removeObject(this);
+      }
+    }
+    
+    x += xSpeed * 2;
+    y += ySpeed * 2;
     collision();
     
     if (handler.isForwardPlayer2()) {
@@ -72,8 +87,10 @@ public class TankPlayer2 extends GameObject {
     
     if (handler.isShootPlayer2()) {
       if (reloadTime == 0) {
-        handler.addObject(new Bullet(x + width / 2, y + height / 2, angle, 8, ObjectID.Bullet, ObjectID.Player2, handler));
-        reloadTime = 100;
+        handler.addObject(new Bullet(x + width / 2, y + height / 2, angle, 8, ObjectID.Bullet, this.getID(), handler));
+        soundPlayer.playSound(shotFired);
+        
+        reloadTime = 90;
       } else {
         reloadTime -= 1;
       }
@@ -122,13 +139,13 @@ public class TankPlayer2 extends GameObject {
     for (int i = 0; i < handler.obj.size(); i++) {
       GameObject tmpObj = handler.obj.get(i);
       
-        if (tmpObj.getID() == ObjectID.IndestructibleBlock || tmpObj.getID() == ObjectID.DestructibleBlock ||
-                tmpObj.getID() == ObjectID.Player1){
-          if (getBounds().intersects(tmpObj.getBounds())) {
-            x += xSpeed * -1;
-            y += ySpeed * -1;
-          }
+      if (tmpObj.getID() == ObjectID.IndestructibleBlock || tmpObj.getID() == ObjectID.DestructibleBlock || 
+              tmpObj.getID() == ObjectID.Player1){
+        if (getBounds().intersects(tmpObj.getBounds())) {
+          x += xSpeed * -1;
+          y += ySpeed * -1;
         }
+      }
     }
   }
 }

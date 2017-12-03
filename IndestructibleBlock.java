@@ -19,7 +19,7 @@ public class IndestructibleBlock extends GameObject {
     blockShape = new Rectangle2D.Double(x, y, width, height);
     
     ImageLoader loader = new ImageLoader();
-    block = loader.loadImage("/wall_indestructible.png");
+    block = loader.loadImage("res/wall_indestructible.png");
   }
   
   @Override
