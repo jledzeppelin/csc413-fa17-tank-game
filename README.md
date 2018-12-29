@@ -2,7 +2,16 @@
 Assignment completed with one other person.
 
 Simple 2 player tank game written in Java where each player commands a tank inside a small map with destructible walls. 
-A player needs to lower the opponents health and lives to win.
+A player needs to lower the opponents health and lives to win. 
+
+**Controls**  
+Player 1  
+Move: WASD  
+Shoot: Spacebar  
+
+Player 2  
+Move: IJKL  
+Shoort: Backspace  
 
 **Run program from terminal (need java compiler):**
 ```
